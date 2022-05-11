@@ -1,99 +1,117 @@
-import React, { FC, ReactNode } from "react";
-import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
-import Box from "@mui/material/Box";
+import React, { FC, ReactNode, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
+import { styled, Theme, CSSObject } from "@mui/material/styles";
+import {
+  Box,
+  List,
+  Toolbar,
+  Typography,
+  Divider,
+  CssBaseline,
+  IconButton,
+  Grid,
+} from "@mui/material";
+import {
+  ContactsOutlined,
+  EditOutlined,
+  HomeOutlined,
+  InfoOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+  Menu,
+  PersonAddOutlined,
+  PolicyOutlined,
+} from "@mui/icons-material";
+import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import { useStyles } from "./styles";
-import { DrawerHeader } from "./componets";
 
-const drawerWidth = 240;
-
-const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: "hidden",
-});
-
-const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
-});
-
-// const DrawerHeader = styled("div")(({ theme }) => ({
-//   display: "flex",
-//   alignItems: "center",
-//   justifyContent: "flex-end",
-//   padding: theme.spacing(0, 1),
-//   // necessary for content to be below app bar
-//   ...theme.mixins.toolbar,
-// }));
-
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(["width", "margin"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
-  ...(open && {
-    ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
-  }),
-}));
+import { DrawerHeader, DrawerItem } from "./componets";
+import { DRAWER_WIDTH } from "./constants";
+import { IAppBarProps } from "./types";
+import {
+  ABOUT,
+  CONTACTS,
+  EDIT_PROFILE,
+  HOME,
+  SIGN_IN,
+  SIGN_OUT,
+  SIGN_UP,
+  TS_AND_CS,
+} from "utils/constants";
+import { useApp } from "store";
+import { useFetchClient, useFetchProvider } from "api/hooks/queries";
+import { getToken, setToken } from "utils/auth";
 
 export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [pagename, setPageName] = useState<string>("Home");
+  const { pathname } = useLocation();
+
+  /**
+   *
+   * Custom hooks
+   *
+   */
+  const { signedInUser, setSignedInUser } = useApp();
+  const { client } = useFetchClient(getToken() || "", signedInUser);
+  const { provider } = useFetchProvider(getToken() || "", signedInUser);
+
+  /**
+   *
+   * Effects
+   *
+   */
+  useEffect(() => {
+    handlePageName();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!client && signedInUser) return;
+    setSignedInUser(client);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client]);
+
+  useEffect(() => {
+    if (!provider && signedInUser) return;
+    setSignedInUser(provider);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [provider]);
+
+  /**
+   *
+   * Handlers
+   *
+   */
+  const handlePageName = () => {
+    const currentUrlName = decodeURI(pathname).split("/")?.[1];
+    switch (currentUrlName) {
+      case ABOUT.toLowerCase():
+        setPageName(ABOUT);
+        break;
+      case CONTACTS.toLowerCase():
+        setPageName(CONTACTS);
+        break;
+      case SIGN_IN.toLowerCase():
+        setPageName(SIGN_IN);
+        break;
+      case SIGN_UP.toLowerCase():
+        setPageName(SIGN_UP);
+        break;
+      case SIGN_OUT.toLowerCase():
+        setPageName(SIGN_OUT);
+        break;
+      case EDIT_PROFILE.toLowerCase():
+        setPageName(EDIT_PROFILE);
+        break;
+      case TS_AND_CS.toLowerCase():
+        setPageName(TS_AND_CS);
+        break;
+      default:
+        setPageName(HOME);
+    }
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -102,6 +120,72 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleSignOut = () => {
+    setToken("");
+    setSignedInUser(undefined);
+  };
+
+  /**
+   *
+   * Templates
+   *
+   */
+  const openedMixin = (theme: Theme): CSSObject => ({
+    width: DRAWER_WIDTH,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    overflowX: "hidden",
+  });
+
+  const closedMixin = (theme: Theme): CSSObject => ({
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: "hidden",
+    width: `calc(${theme.spacing(7)} + 1px)`,
+    [theme.breakpoints.up("sm")]: {
+      width: `calc(${theme.spacing(8)} + 1px)`,
+    },
+  });
+
+  const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== "open",
+  })<IAppBarProps>(({ theme, open }) => ({
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    ...(open && {
+      marginLeft: DRAWER_WIDTH,
+      width: `calc(100% - ${DRAWER_WIDTH}px)`,
+      transition: theme.transitions.create(["width", "margin"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    }),
+  }));
+
+  const Drawer = styled(MuiDrawer, {
+    shouldForwardProp: (prop) => prop !== "open",
+  })(({ theme, open }) => ({
+    width: DRAWER_WIDTH,
+    flexShrink: 0,
+    whiteSpace: "nowrap",
+    boxSizing: "border-box",
+    ...(open && {
+      ...openedMixin(theme),
+      "& .MuiDrawer-paper": openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      "& .MuiDrawer-paper": closedMixin(theme),
+    }),
+  }));
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -118,71 +202,86 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
               ...(open && { display: "none" }),
             }}
           >
-            <MenuIcon />
+            <Menu />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Groomzy
-          </Typography>
+          <Grid container alignItems="baseline" justifyContent="space-between">
+            <Grid item>
+              <Typography variant="h6" noWrap component="div">
+                Groomzy
+              </Typography>
+            </Grid>
+            <Grid item>{pagename}</Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open} color="red">
-        {/* <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </DrawerHeader> */}
         <DrawerHeader handleDrawerClose={handleDrawerClose} open={open} />
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItemButton
-              key={text}
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          ))}
+          <DrawerItem
+            text={HOME}
+            open={open}
+            pathTo={"/"}
+            icon={<HomeOutlined />}
+          />
+          <DrawerItem
+            text={ABOUT}
+            open={open}
+            pathTo={ABOUT.toLowerCase()}
+            icon={<InfoOutlined />}
+          />
+          <DrawerItem
+            text={CONTACTS}
+            open={open}
+            pathTo={CONTACTS.toLowerCase()}
+            icon={<ContactsOutlined />}
+          />
         </List>
         <Divider />
         <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItemButton
-              key={text}
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          ))}
+          {signedInUser ? (
+            <DrawerItem
+              text={EDIT_PROFILE}
+              open={open}
+              pathTo={EDIT_PROFILE.toLowerCase()}
+              icon={<EditOutlined />}
+            />
+          ) : null}
+          {!signedInUser ? (
+            <DrawerItem
+              text={SIGN_IN}
+              open={open}
+              pathTo={encodeURI(SIGN_IN.toLowerCase())}
+              icon={<LoginOutlined />}
+            />
+          ) : null}
+          {!signedInUser ? (
+            <DrawerItem
+              text={SIGN_UP}
+              open={open}
+              pathTo={SIGN_UP.toLowerCase()}
+              icon={<PersonAddOutlined />}
+            />
+          ) : null}
+          {signedInUser ? (
+            <DrawerItem
+              text={SIGN_OUT}
+              open={open}
+              pathTo={"/"}
+              replace={true}
+              icon={<LogoutOutlined />}
+              onClick={handleSignOut}
+            />
+          ) : null}
+        </List>
+        <Divider />
+        <List>
+          <DrawerItem
+            text={TS_AND_CS}
+            open={open}
+            pathTo={TS_AND_CS.toLowerCase()}
+            icon={<PolicyOutlined />}
+          />
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

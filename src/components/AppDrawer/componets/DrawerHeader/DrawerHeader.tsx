@@ -1,9 +1,14 @@
 import React, { FC } from "react";
 import { Grid, Box, IconButton } from "@mui/material";
-import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
+import {
+  ChevronLeft,
+  ChevronRight,
+  PersonOutlineRounded,
+} from "@mui/icons-material";
 
+import { useApp } from "store";
 import { IDrawerHeaderProps } from "./types";
-import { ChevronLeft, ChevronRight, PersonRounded } from "@mui/icons-material";
 import { useStyles } from "./styles";
 
 export const DrawerHeader: FC<IDrawerHeaderProps> = ({
@@ -11,6 +16,13 @@ export const DrawerHeader: FC<IDrawerHeaderProps> = ({
   open,
 }) => {
   const theme = useTheme();
+
+  /**
+   *
+   * Custom hooks
+   *
+   */
+  const { signedInUser } = useApp();
   const classes = useStyles();
 
   return (
@@ -23,12 +35,13 @@ export const DrawerHeader: FC<IDrawerHeaderProps> = ({
       <Grid item>
         {open ? (
           <Box marginLeft={2}>
-            <Grid container direction="column">
+            <Grid container alignItems="center">
               <Grid item>
-                <PersonRounded />
+                <PersonOutlineRounded />
               </Grid>
-              {/* {fullName ? <Grid item>{fullName}</Grid> : null}
-                {email ? <Grid item>{email}</Grid> : null} */}
+              {signedInUser?.fullName ? (
+                <Grid item>{signedInUser.fullName}</Grid>
+              ) : null}
             </Grid>
           </Box>
         ) : null}

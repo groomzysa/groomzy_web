@@ -1,17 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
-import {
-  Avatar,
-  Card,
-  CardHeader,
-  CardMedia,
-  CircularProgress,
-  IconButton,
-} from "@mui/material";
+import { Card, CardHeader, CardMedia, IconButton, Box } from "@mui/material";
+
 import { LocationOnOutlined } from "@mui/icons-material";
-import { blueGrey } from "@mui/material/colors";
+
+import { GLoadingSpinner } from "components";
+
 import { IProviderProps } from "./types";
 import { useProviderHandlers } from "./hooks";
-import { Box } from "@mui/system";
 import { useStyles } from "./styles";
 
 export const Provider: FC<IProviderProps> = ({
@@ -33,6 +28,7 @@ export const Provider: FC<IProviderProps> = ({
    */
   useEffect(() => {
     handleDistance();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -54,7 +50,7 @@ export const Provider: FC<IProviderProps> = ({
         }
         action={
           <Box>
-            {loadingDistance ? <CircularProgress size={20} /> : distance}
+            {loadingDistance ? <GLoadingSpinner size={20} /> : distance}
           </Box>
         }
         title={fullName}

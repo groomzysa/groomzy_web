@@ -15,6 +15,11 @@ export enum Duration {
   Min = "min",
   Hour = "hrz",
 }
+
+export enum Role {
+  Provider = "Provider",
+  Client = "Client",
+}
 /**
  *
  * Interfaces
@@ -23,11 +28,13 @@ export enum Duration {
 export interface IAppState {
   providers: IProvider[];
   providersSearch: IProvidersSearch;
+  signedInUser?: IUser;
 }
 
 export interface IAppProviderProps extends IAppState {
   setProviders: (providers: IProvider[]) => void;
   setProvidersSearch: (providersSearch: IProvidersSearch) => void;
+  setSignedInUser: (signedInUser: IUser) => void;
 }
 
 export interface IProvidersSearch {
@@ -134,3 +141,25 @@ export interface IServiceProviderCategories {
   category: ICategory;
   service: IService;
 }
+
+export interface ISignInClient extends IClient {
+  token: string;
+  role: Role;
+}
+
+export interface ISignInProvider extends IProvider {
+  token: string;
+  role: Role;
+}
+
+export interface IMessage {
+  message: string;
+}
+
+/**
+ *
+ * Types
+ *
+ */
+
+export type IUser = IClient | IProvider | undefined;

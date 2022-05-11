@@ -22,7 +22,8 @@ export const useFetchProviders = ({ variables }: IUseFetchProviders) => {
     fetchProviders
   );
 
-  const errorMessage = (error as Error)?.message;
+  //@ts-ignore
+  const errorMessage = error?.response?.errors?.[0]?.message;
 
   return { providers: data?.providers || [], isLoading, errorMessage };
 };

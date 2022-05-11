@@ -34,8 +34,6 @@ export const useProviderHandlers = ({
   };
 
   const handleDistance = () => {
-    let distance: string | undefined = undefined;
-    const navigatore = window.navigator;
     if (!("geolocation" in navigator)) {
       alert(
         "The device does not support geolacation to determine current position."

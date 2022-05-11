@@ -5,14 +5,24 @@ import {
   useContext,
   useReducer,
 } from "react";
-import { setProvidersDispatch, setProvidersSearchDispatch } from "store/action";
+import {
+  setProvidersDispatch,
+  setProvidersSearchDispatch,
+  setSignedInUserDispatch,
+} from "store/action";
 import { appReducer, initialState } from "store/reducer";
-import { IAppProviderProps, IProvider, IProvidersSearch } from "store/types";
+import {
+  IAppProviderProps,
+  IProvider,
+  IProvidersSearch,
+  IUser,
+} from "store/types";
 
 const initialAppProviderValue = {
   ...initialState,
-  setProviders: (providers: IProvider[]) => {},
-  setProvidersSearch: (providersSearch: IProvidersSearch) => {},
+  setProviders: (_: IProvider[]) => {},
+  setProvidersSearch: (_: IProvidersSearch) => {},
+  setSignedInUser: (_?: IUser) => {},
 };
 
 const AppContext: Context<IAppProviderProps> = createContext(
@@ -35,6 +45,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setProvidersSearchDispatch(dispatch, providersSearch);
   };
 
+  const setSignedInUser = (signedInUser: IUser) => {
+    setSignedInUserDispatch(dispatch, signedInUser);
+  };
+
   /**
    *
    * App provider value
@@ -44,6 +58,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     ...state,
     setProviders,
     setProvidersSearch,
+    setSignedInUser,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -1,3 +1,15 @@
-export { SET_PROVIDERS, SET_PROVIDERS_SEARCH } from "./actionTypes";
-export { setProvidersAction, setProvidersSearchAction } from "./actions";
-export { setProvidersDispatch, setProvidersSearchDispatch } from "./dispatches";
+export {
+  SET_PROVIDERS,
+  SET_PROVIDERS_SEARCH,
+  SET_SIGNEDIN_USER,
+} from "./actionTypes";
+export {
+  setProvidersAction,
+  setProvidersSearchAction,
+  setSignedInUserAction,
+} from "./actions";
+export {
+  setProvidersDispatch,
+  setProvidersSearchDispatch,
+  setSignedInUserDispatch,
+} from "./dispatches";

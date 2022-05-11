@@ -1,6 +1,10 @@
 import { Dispatch } from "react";
-import { IAction, IProvider, IProvidersSearch } from "store/types";
-import { SET_PROVIDERS } from "./actionTypes";
+import { IAction, IProvider, IProvidersSearch, IUser } from "store/types";
+import {
+  SET_PROVIDERS,
+  SET_SIGNEDIN_USER,
+  SET_PROVIDERS_SEARCH,
+} from "./actionTypes";
 
 export const setProvidersDispatch = (
   dispatch: Dispatch<IAction>,
@@ -19,9 +23,21 @@ export const setProvidersSearchDispatch = (
   providersSearch: IProvidersSearch
 ) => {
   dispatch({
-    type: SET_PROVIDERS,
+    type: SET_PROVIDERS_SEARCH,
     payload: {
       providersSearch,
+    },
+  });
+};
+
+export const setSignedInUserDispatch = (
+  dispatch: Dispatch<IAction>,
+  signedInUser: IUser
+) => {
+  dispatch({
+    type: SET_SIGNEDIN_USER,
+    payload: {
+      signedInUser,
     },
   });
 };

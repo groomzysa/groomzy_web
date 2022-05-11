@@ -1,19 +1,24 @@
 import React, { FC } from "react";
-import { Provider } from "components";
+import { Box, Container, Grid } from "@mui/material";
+
 import { useApp } from "store";
-import { Box, CircularProgress, Container, Divider, Grid } from "@mui/material";
 import { useFetchProviders } from "api/hooks/queries";
-import { useStyles } from "./styles";
+
+import { GLoadingSpinner, Provider } from "components";
 
 export const ProviderPage: FC = () => {
+  /**
+   *
+   * Custom hooks
+   *
+   */
   const { providersSearch } = useApp();
   const { providers, isLoading, errorMessage } = useFetchProviders({
     variables: { ...providersSearch },
   });
-  const classes = useStyles();
 
   if (isLoading) {
-    return <CircularProgress />;
+    return <GLoadingSpinner />;
   }
 
   if (errorMessage) {
@@ -28,7 +33,7 @@ export const ProviderPage: FC = () => {
     <Grid container justifyContent="normal">
       {providers.map((provider) => {
         return (
-          <Grid key={provider.id} item xs={12} md={6} lg={4}>
+          <Grid key={provider.id} item xs={12} sm={6} md={6} lg={4}>
             <Box margin={1}>
               <Provider provider={provider} />
             </Box>

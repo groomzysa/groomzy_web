@@ -1,4 +1,4 @@
-import { IAppState, IProvider, IProvidersSearch } from "store/types";
+import { IAppState, IProvider, IProvidersSearch, IUser } from "store/types";
 
 export const setProvidersAction = (
   state: IAppState,
@@ -17,5 +17,15 @@ export const setProvidersSearchAction = (
   return {
     ...state,
     providersSearch,
+  };
+};
+
+export const setSignedInUserAction = (
+  state: IAppState,
+  signedInUser: IUser
+) => {
+  return {
+    ...state,
+    signedInUser,
   };
 };
