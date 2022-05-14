@@ -13,9 +13,7 @@ export const useSigninClient = ({ variables }: IUseSigninClient) => {
   const endpoint: string = process.env.REACT_APP_API_URL;
 
   const signiClient = async () => {
-    const client = await request(endpoint, SIGNIN_CLIENT_MUTATION, variables);
-
-    return client;
+    return await request(endpoint, SIGNIN_CLIENT_MUTATION, variables);
   };
 
   const {

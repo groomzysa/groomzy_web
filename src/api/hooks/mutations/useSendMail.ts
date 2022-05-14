@@ -13,9 +13,7 @@ export const useSendMail = ({ variables }: ISendEmail) => {
   const endpoint: string = process.env.REACT_APP_API_URL;
 
   const sendMail = async () => {
-    const client = await request(endpoint, SEND_MAIL_MUTATION, variables);
-
-    return client;
+    return await request(endpoint, SEND_MAIL_MUTATION, variables);
   };
 
   const {

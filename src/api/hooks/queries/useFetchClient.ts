@@ -24,11 +24,9 @@ export const useFetchClient = (token: string, signedInUser: IUser) => {
   }
 
   const fetchClient = async () => {
-    const client = await request(endpoint, CLIENT_QUERY, undefined, {
+    return await request(endpoint, CLIENT_QUERY, undefined, {
       authorization: `Bearer ${token}`,
     });
-
-    return client;
   };
 
   const { data, isLoading, error } = useQuery<{ client: IUser }>(

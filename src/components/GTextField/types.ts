@@ -11,4 +11,7 @@ export interface IGTextFieldProps {
   textValue?: string;
   multiline?: boolean;
   rows?: number;
+  disabled?: boolean;
+  children?: any;
+  isSelect?: boolean;
 }

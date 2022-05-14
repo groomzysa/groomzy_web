@@ -3,5 +3,4 @@ export interface GButtonProps {
   onClick?: () => void;
   text: string;
   loading?: boolean;
-  loadingPosition?: "center" | "end" | "start";
 }

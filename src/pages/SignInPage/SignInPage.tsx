@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Alert, Grid } from "@mui/material";
 
 import { useSigninClient, useSigninProvider } from "api/hooks/mutations";
-import { SIGN_IN } from "utils/constants";
-import { useApp } from "store";
-import { GButton, GCheckBox, GLoadingSpinner, GTextField } from "components";
-import { useStyles } from "./styles";
+import { SIGN_IN, SIGN_UP } from "utils/constants";
 import { setToken } from "utils/auth";
+import { useApp } from "store";
+
+import { GButton, GCheckBox, GTextField } from "components";
+
+import { useStyles } from "./styles";
 
 export const SignInPage: FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -31,6 +33,7 @@ export const SignInPage: FC = () => {
   } = useSigninClient({
     variables: { email, password },
   });
+
   const {
     signinProviderMutate,
     provider,
@@ -85,9 +88,13 @@ export const SignInPage: FC = () => {
     setIsProvider(!isProvider);
   };
 
-  return signinClientLoading || signinProviderLoading ? (
-    <GLoadingSpinner />
-  ) : (
+  const handleJoinClick = () => {
+    navigate(`/${encodeURI(SIGN_UP.toLowerCase())}`);
+  };
+
+  const isLoading = signinClientLoading || signinProviderLoading;
+
+  return (
     <Grid className={classes.center} container>
       <Grid item xs={0} sm={2} md={3} lg={4}></Grid>
       <Grid item xs={12} sm={8} md={6} lg={4}>
@@ -106,6 +113,7 @@ export const SignInPage: FC = () => {
               type="email"
               setText={setEmail}
               textValue={email}
+              disabled={isLoading}
             />
           </Grid>
           <Grid className={classes.padTop10} item xs>
@@ -115,6 +123,7 @@ export const SignInPage: FC = () => {
               type="password"
               setText={setPassword}
               textValue={password}
+              disabled={isLoading}
             />
           </Grid>
           <Grid className={classes.padTop10} item xs>
@@ -136,7 +145,7 @@ export const SignInPage: FC = () => {
                 <GButton text="Forgot password" />
               </Grid>
               <Grid className={classes.padTop10} item>
-                <GButton text="Want to join?" />
+                <GButton text="Want to join?" onClick={handleJoinClick} />
               </Grid>
             </Grid>
           </Grid>

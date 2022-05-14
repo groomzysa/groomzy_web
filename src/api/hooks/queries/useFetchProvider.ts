@@ -24,11 +24,9 @@ export const useFetchProvider = (token: string, signedInUser: IUser) => {
   }
 
   const fetchProvider = async () => {
-    const provider = await request(endpoint, PROVIDER_QUERY, undefined, {
+    return await request(endpoint, PROVIDER_QUERY, undefined, {
       authorization: `Bearer ${token}`,
     });
-
-    return provider;
   };
 
   const { data, isLoading, error } = useQuery<{ provider: IUser }>(

@@ -37,10 +37,12 @@ export const DrawerHeader: FC<IDrawerHeaderProps> = ({
           <Box marginLeft={2}>
             <Grid container alignItems="center">
               <Grid item>
-                <PersonOutlineRounded />
+                <PersonOutlineRounded className={classes.white} />
               </Grid>
               {signedInUser?.fullName ? (
-                <Grid item>{signedInUser.fullName}</Grid>
+                <Grid item className={classes.white}>
+                  {signedInUser.fullName}
+                </Grid>
               ) : null}
             </Grid>
           </Box>
@@ -48,7 +50,11 @@ export const DrawerHeader: FC<IDrawerHeaderProps> = ({
       </Grid>
       <Grid item>
         <IconButton onClick={handleDrawerClose}>
-          {theme.direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
+          {theme.direction === "rtl" ? (
+            <ChevronRight className={classes.white} />
+          ) : (
+            <ChevronLeft className={classes.white} />
+          )}
         </IconButton>
       </Grid>
     </Grid>

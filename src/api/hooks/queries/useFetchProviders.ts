@@ -12,9 +12,7 @@ export const useFetchProviders = ({ variables }: IUseFetchProviders) => {
   const endpoint: string = process.env.REACT_APP_API_URL;
 
   const fetchProviders = async () => {
-    const providers = await request(endpoint, PROVIDERS_QUERY, variables);
-
-    return providers;
+    return await request(endpoint, PROVIDERS_QUERY, variables);
   };
 
   const { data, isLoading, error } = useQuery<{ providers: IProvider[] }>(

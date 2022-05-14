@@ -9,7 +9,6 @@ export const GButton: FC<GButtonProps> = ({
   text,
   onClick,
   loading = false,
-  loadingPosition,
 }) => {
   const classes = useStyles();
   return (
@@ -20,7 +19,7 @@ export const GButton: FC<GButtonProps> = ({
       disableRipple
       disableElevation
       loading={loading}
-      loadingPosition={loadingPosition}
+      loadingIndicator="Loading..."
     >
       {text}
     </LoadingButton>

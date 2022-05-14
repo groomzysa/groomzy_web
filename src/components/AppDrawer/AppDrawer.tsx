@@ -227,13 +227,13 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
           <DrawerItem
             text={ABOUT}
             open={open}
-            pathTo={ABOUT.toLowerCase()}
+            pathTo={encodeURI(ABOUT.toLowerCase())}
             icon={<InfoOutlined />}
           />
           <DrawerItem
             text={CONTACTS}
             open={open}
-            pathTo={CONTACTS.toLowerCase()}
+            pathTo={encodeURI(CONTACTS.toLowerCase())}
             icon={<ContactsOutlined />}
           />
         </List>
@@ -243,7 +243,7 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
             <DrawerItem
               text={EDIT_PROFILE}
               open={open}
-              pathTo={EDIT_PROFILE.toLowerCase()}
+              pathTo={encodeURI(EDIT_PROFILE.toLowerCase())}
               icon={<EditOutlined />}
             />
           ) : null}
@@ -259,7 +259,7 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
             <DrawerItem
               text={SIGN_UP}
               open={open}
-              pathTo={SIGN_UP.toLowerCase()}
+              pathTo={encodeURI(SIGN_UP.toLowerCase())}
               icon={<PersonAddOutlined />}
             />
           ) : null}
@@ -279,7 +279,7 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
           <DrawerItem
             text={TS_AND_CS}
             open={open}
-            pathTo={TS_AND_CS.toLowerCase()}
+            pathTo={encodeURI(TS_AND_CS.toLowerCase())}
             icon={<PolicyOutlined />}
           />
         </List>

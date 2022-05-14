@@ -15,6 +15,9 @@ export const GTextField: FC<IGTextFieldProps> = ({
   textValue = "",
   multiline = false,
   rows = 1,
+  disabled = false,
+  children,
+  isSelect,
 }) => {
   const classes = useStyles();
 
@@ -26,7 +29,7 @@ export const GTextField: FC<IGTextFieldProps> = ({
   const handleTextChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    setText(e.currentTarget.value);
+    setText(e?.currentTarget?.value || e.target.value);
   };
   return (
     <TextField
@@ -40,6 +43,10 @@ export const GTextField: FC<IGTextFieldProps> = ({
       value={textValue}
       multiline={multiline}
       rows={rows}
-    />
+      disabled={disabled}
+      select={isSelect}
+    >
+      {children}
+    </TextField>
   );
 };

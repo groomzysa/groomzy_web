@@ -137,7 +137,6 @@ export const ContactsPage: FC = () => {
               text="Send"
               onClick={handleSendEmail}
               loading={sendMailLoading}
-              loadingPosition="start"
             />
           </Grid>
           <Grid className={classes.padTop10} item xs>

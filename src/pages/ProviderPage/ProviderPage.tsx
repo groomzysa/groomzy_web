@@ -31,15 +31,29 @@ export const ProviderPage: FC = () => {
 
   return (
     <Grid container justifyContent="normal">
-      {providers.map((provider) => {
-        return (
-          <Grid key={provider.id} item xs={12} sm={6} md={6} lg={4}>
-            <Box margin={1}>
-              <Provider provider={provider} />
-            </Box>
-          </Grid>
-        );
-      })}
+      {providers
+        .filter((provider) => {
+          let show: boolean = true;
+          const { serviceProviderCategories, address } = provider;
+          const { latitude, longitude } = address;
+          if (serviceProviderCategories?.length <= 0) {
+            show = false;
+          }
+
+          if (!latitude || !longitude) {
+            show = false;
+          }
+          return show;
+        })
+        .map((provider) => {
+          return (
+            <Grid key={provider.id} item xs={12} sm={6} md={6} lg={4}>
+              <Box margin={1}>
+                <Provider provider={provider} />
+              </Box>
+            </Grid>
+          );
+        })}
     </Grid>
   );
 };

@@ -20,6 +20,14 @@ export enum Role {
   Provider = "Provider",
   Client = "Client",
 }
+
+export enum Category {
+  Barber = "Barber",
+  MakeupArtist = "Makeup Artist",
+  NailTechnician = "Nail Technician",
+  Hairdresser = "Hairdresser",
+  Spa = "Spa",
+}
 /**
  *
  * Interfaces
@@ -154,6 +162,12 @@ export interface ISignInProvider extends IProvider {
 
 export interface IMessage {
   message: string;
+}
+
+export interface ISelectOption {
+  id: number;
+  value: string;
+  label: string;
 }
 
 /**

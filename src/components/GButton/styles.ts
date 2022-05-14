@@ -12,5 +12,12 @@ export const useStyles = makeStyles(() => {
         },
       },
     },
+    circularProgress: {
+      "&.MuiCircularProgress-root": {
+        "&.MuiCircularProgress-colorPrimary": {
+          color: blueGrey[500],
+        },
+      },
+    },
   };
 });

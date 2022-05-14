@@ -55,7 +55,7 @@ export const useProviderHandlers = ({
 
           setLoadingDistance(false);
           setDistance(
-            `~${(haversine(devicePosition, providerPosition) / 1000).toFixed(
+            `${(haversine(devicePosition, providerPosition) / 1000).toFixed(
               1
             )} km`
           );
