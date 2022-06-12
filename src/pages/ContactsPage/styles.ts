@@ -5,7 +5,6 @@ export const useStyles = makeStyles(() => {
   return {
     center: {
       position: "relative",
-      top: 100,
     },
     heading: {
       color: blueGrey[500],

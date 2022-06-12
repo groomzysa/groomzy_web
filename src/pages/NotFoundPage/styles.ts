@@ -4,8 +4,12 @@ import { blueGrey } from "@mui/material/colors";
 export const useStyles = makeStyles(() => {
   return {
     center: {
+      margin: "auto",
       position: "relative",
-      top: 200,
+      top: "50%",
+      left: "35%",
+      transform: "translateY(-50%)",
+      maxWidth: 250,
     },
     padTop10: {
       paddingTop: 10,
