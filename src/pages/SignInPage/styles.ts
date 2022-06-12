@@ -5,6 +5,9 @@ export const useStyles = makeStyles(() => {
   return {
     center: {
       position: "relative",
+      margin: "auto",
+      left: "0%",
+      transform: "translateY(30%)",
     },
     padTop10: {
       paddingTop: 10,

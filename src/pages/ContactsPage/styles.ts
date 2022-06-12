@@ -5,6 +5,9 @@ export const useStyles = makeStyles(() => {
   return {
     center: {
       position: "relative",
+      margin: "auto",
+      left: "0%",
+      transform: "translateY(10%)",
     },
     heading: {
       color: blueGrey[500],
