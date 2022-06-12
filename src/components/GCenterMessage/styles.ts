@@ -7,7 +7,7 @@ export const useStyles = makeStyles(() => {
       margin: "auto",
       position: "absolute",
       top: "50%",
-      left: "40%",
+      left: "35%",
       transform: "translateY(-50%)",
       color: orange[500],
       maxWidth: 250,
