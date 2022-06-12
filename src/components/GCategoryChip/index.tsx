@@ -1,0 +1,1 @@
+export { GCategoryChip } from "./GCategoryChip";

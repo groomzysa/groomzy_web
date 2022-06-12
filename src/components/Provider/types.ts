@@ -1,5 +1,5 @@
-import { IProvider } from "store/types";
+import { Provider } from "api/generated/graphqlTypes";
 
 export interface IProviderProps {
-  provider: IProvider;
+  provider: Provider;
 }

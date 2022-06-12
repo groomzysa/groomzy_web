@@ -1,19 +1,14 @@
-import request from "graphql-request";
 import { useMutation } from "react-query";
 
 import { SIGNIN_PROVIDER_MUTATION } from "api/graphql/mutations";
-import { ISignInProvider } from "store/types";
+import { graphqlRequestClient } from "utils/graphqlClient";
+import { Provider } from "api/generated/graphqlTypes";
+
 import { IUseSigninProvider } from "./types";
 
 export const useSigninProvider = ({ variables }: IUseSigninProvider) => {
-  if (!process.env.REACT_APP_API_URL) {
-    throw new Error("No API endpoint defined");
-  }
-
-  const endpoint: string = process.env.REACT_APP_API_URL;
-
   const signiClient = async () => {
-    return await request(endpoint, SIGNIN_PROVIDER_MUTATION, variables);
+    return graphqlRequestClient().request(SIGNIN_PROVIDER_MUTATION, variables);
   };
 
   const {
@@ -23,7 +18,7 @@ export const useSigninProvider = ({ variables }: IUseSigninProvider) => {
     error,
     isError,
   } = useMutation<{
-    signinProvider: ISignInProvider;
+    signinProvider: Provider;
   }>("signiClient", signiClient);
 
   //@ts-ignore

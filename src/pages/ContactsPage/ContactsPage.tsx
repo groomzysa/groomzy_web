@@ -134,9 +134,10 @@ export const ContactsPage: FC = () => {
           </Grid>
           <Grid className={classes.padTop10} item xs>
             <GButton
-              text="Send"
+              children="Send"
               onClick={handleSendEmail}
               loading={sendMailLoading}
+              className={classes.button}
             />
           </Grid>
           <Grid className={classes.padTop10} item xs>

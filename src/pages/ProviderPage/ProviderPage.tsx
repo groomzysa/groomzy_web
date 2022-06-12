@@ -1,59 +1,105 @@
-import React, { FC } from "react";
-import { Box, Container, Grid } from "@mui/material";
+import React, { FC, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Grid,
+  Paper,
+} from "@mui/material";
+import {
+  TimelapseOutlined,
+  GroupAddOutlined,
+  BusinessCenterOutlined,
+  PublicOutlined,
+} from "@mui/icons-material";
+import { getUserIdAndRole } from "utils/auth";
 
-import { useApp } from "store";
-import { useFetchProviders } from "api/hooks/queries";
+import { Role } from "store/types";
 
-import { GLoadingSpinner, Provider } from "components";
+import {
+  OperatingTimes,
+  Services,
+  Staffs,
+  BusinessProfile,
+} from "./components";
+import { useStyles } from "./styles";
 
 export const ProviderPage: FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const tabIndex = searchParams.get("tabIndex");
+
   /**
    *
    * Custom hooks
    *
    */
-  const { providersSearch } = useApp();
-  const { providers, isLoading, errorMessage } = useFetchProviders({
-    variables: { ...providersSearch },
-  });
+  const classes = useStyles();
+  const { role } = getUserIdAndRole();
 
-  if (isLoading) {
-    return <GLoadingSpinner />;
-  }
+  /**
+   *
+   * Effects
+   *
+   */
+  useEffect(() => {
+    if (role !== Role.Provider) {
+      navigate(encodeURI("/"));
+    }
 
-  if (errorMessage) {
-    return (
-      <Container>
-        <Box color="red">{errorMessage}</Box>
-      </Container>
-    );
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [role]);
+
+  /**
+   *
+   * Handlers
+   *
+   */
+  const handleTabIndexChange = (newTabIndex: number) => {
+    setSearchParams({ tabIndex: String(newTabIndex) });
+  };
 
   return (
-    <Grid container justifyContent="normal">
-      {providers
-        .filter((provider) => {
-          let show: boolean = true;
-          const { serviceProviderCategories, address } = provider;
-          const { latitude, longitude } = address;
-          if (serviceProviderCategories?.length <= 0) {
-            show = false;
-          }
+    <Grid>
+      {Number(tabIndex) === 0 ? <Services /> : null}
+      {Number(tabIndex) === 1 ? <OperatingTimes /> : null}
+      {Number(tabIndex) === 2 ? <Staffs /> : null}
+      {Number(tabIndex) === 3 ? <BusinessProfile /> : null}
 
-          if (!latitude || !longitude) {
-            show = false;
-          }
-          return show;
-        })
-        .map((provider) => {
-          return (
-            <Grid key={provider.id} item xs={12} sm={6} md={6} lg={4}>
-              <Box margin={1}>
-                <Provider provider={provider} />
-              </Box>
-            </Grid>
-          );
-        })}
+      <Paper
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        elevation={3}
+      >
+        <BottomNavigation
+          showLabels
+          value={Number(tabIndex)}
+          onChange={(event, newTabIndex) => {
+            handleTabIndexChange(newTabIndex);
+          }}
+        >
+          <BottomNavigationAction
+            className={classes.bottomNavigationAction}
+            label="Services"
+            icon={<BusinessCenterOutlined />}
+          />
+          <BottomNavigationAction
+            className={classes.bottomNavigationAction}
+            label="Operating time"
+            icon={<TimelapseOutlined />}
+          />
+          <BottomNavigationAction
+            className={classes.bottomNavigationAction}
+            label="Staff"
+            icon={<GroupAddOutlined />}
+          />
+          <BottomNavigationAction
+            className={classes.bottomNavigationAction}
+            label="Business profile"
+            icon={<PublicOutlined />}
+          />
+        </BottomNavigation>
+      </Paper>
     </Grid>
   );
 };

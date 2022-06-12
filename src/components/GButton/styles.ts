@@ -4,7 +4,7 @@ import { blueGrey } from "@mui/material/colors";
 export const useStyles = makeStyles(() => {
   return {
     button: {
-      "&.MuiButton-root": {
+      "& .MuiLoadingButton-root": {
         backgroundColor: blueGrey[500],
         textTransform: "none",
         "&:hover": {

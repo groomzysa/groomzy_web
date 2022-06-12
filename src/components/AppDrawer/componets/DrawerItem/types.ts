@@ -7,4 +7,5 @@ export interface IDrawerItemProps {
   icon: ReactElement;
   replace?: boolean;
   onClick?: () => void;
+  isLink?: boolean;
 }

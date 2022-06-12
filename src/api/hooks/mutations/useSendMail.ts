@@ -1,19 +1,14 @@
-import request from "graphql-request";
 import { useMutation } from "react-query";
 
 import { SEND_MAIL_MUTATION } from "api/graphql/mutations";
+import { graphqlRequestClient } from "utils/graphqlClient";
 import { IMessage } from "store/types";
+
 import { ISendEmail } from "./types";
 
 export const useSendMail = ({ variables }: ISendEmail) => {
-  if (!process.env.REACT_APP_API_URL) {
-    throw new Error("No API endpoint defined");
-  }
-
-  const endpoint: string = process.env.REACT_APP_API_URL;
-
   const sendMail = async () => {
-    return await request(endpoint, SEND_MAIL_MUTATION, variables);
+    return graphqlRequestClient().request(SEND_MAIL_MUTATION, variables);
   };
 
   const {

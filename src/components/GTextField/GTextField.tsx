@@ -1,5 +1,6 @@
 import React, { FC } from "react";
-import { TextField } from "@mui/material";
+import { InputAdornment, TextField } from "@mui/material";
+import { isEmpty } from "lodash";
 
 import { useStyles } from "./styles";
 import { IGTextFieldProps } from "./types";
@@ -18,6 +19,9 @@ export const GTextField: FC<IGTextFieldProps> = ({
   disabled = false,
   children,
   isSelect,
+  startIcon,
+  placeholder,
+  errorMessage = "",
 }) => {
   const classes = useStyles();
 
@@ -45,6 +49,14 @@ export const GTextField: FC<IGTextFieldProps> = ({
       rows={rows}
       disabled={disabled}
       select={isSelect}
+      InputProps={{
+        startAdornment: startIcon ? (
+          <InputAdornment position="start">{startIcon}</InputAdornment>
+        ) : null,
+      }}
+      placeholder={placeholder}
+      error={!isEmpty(errorMessage)}
+      helperText={errorMessage}
     >
       {children}
     </TextField>

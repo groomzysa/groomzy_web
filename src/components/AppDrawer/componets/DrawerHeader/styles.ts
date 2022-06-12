@@ -13,5 +13,17 @@ export const useStyles = makeStyles((theme: Theme) => {
     white: {
       color: "white",
     },
+    name: {
+      maxWidth: 100,
+      color: "white",
+      paddingLeft: 5,
+    },
+
+    avatar: {
+      "&.MuiAvatar-root": {
+        backgroundColor: "whitesmoke",
+        color: blueGrey[500],
+      },
+    },
   };
 });

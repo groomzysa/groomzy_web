@@ -1,9 +1,7 @@
-import { IAppState, IProvider, IProvidersSearch, IUser } from "store/types";
+import { Provider, QueryProvidersArgs } from "api/generated/graphqlTypes";
+import { IAppState, IUser } from "store/types";
 
-export const setProvidersAction = (
-  state: IAppState,
-  providers: IProvider[]
-) => {
+export const setProvidersAction = (state: IAppState, providers: Provider[]) => {
   return {
     ...state,
     providers,
@@ -12,7 +10,7 @@ export const setProvidersAction = (
 
 export const setProvidersSearchAction = (
   state: IAppState,
-  providersSearch: IProvidersSearch
+  providersSearch: QueryProvidersArgs
 ) => {
   return {
     ...state,

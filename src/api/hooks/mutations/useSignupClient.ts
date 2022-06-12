@@ -1,19 +1,14 @@
-import request from "graphql-request";
 import { useMutation } from "react-query";
 
 import { SIGNUP_CLIENT_MUTATION } from "api/graphql/mutations";
+import { graphqlRequestClient } from "utils/graphqlClient";
 import { IMessage } from "store/types";
+
 import { IUseSignupClient } from "./types";
 
 export const useSignupClient = ({ variables }: IUseSignupClient) => {
-  if (!process.env.REACT_APP_API_URL) {
-    throw new Error("No API endpoint defined");
-  }
-
-  const endpoint: string = process.env.REACT_APP_API_URL;
-
   const sigupClient = async () => {
-    return await request(endpoint, SIGNUP_CLIENT_MUTATION, variables);
+    return graphqlRequestClient().request(SIGNUP_CLIENT_MUTATION, variables);
   };
 
   const {

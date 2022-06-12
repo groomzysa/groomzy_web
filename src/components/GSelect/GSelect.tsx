@@ -11,6 +11,7 @@ export const GSelect: FC<IGSelectProps> = ({
   selectLabel,
   setSelect,
   value,
+  disabled = false,
 }) => {
   /**
    *
@@ -30,6 +31,7 @@ export const GSelect: FC<IGSelectProps> = ({
       isSelect={true}
       setText={handleChange}
       textValue={value?.value || ""}
+      disabled={disabled}
     >
       {options.map((option) => (
         <MenuItem key={option.id} value={option.value}>

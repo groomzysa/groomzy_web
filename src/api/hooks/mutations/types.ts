@@ -1,48 +1,107 @@
+import {
+  MutationAddGalleryArgs,
+  MutationAddOperatingTimeArgs,
+  MutationAddProviderProfileArgs,
+  MutationAddServiceArgs,
+  MutationAddSocialArgs,
+  MutationAddStaffArgs,
+  MutationDeleteGalleryArgs,
+  MutationDeleteOperatingTimeArgs,
+  MutationDeleteServiceArgs,
+  MutationDeleteSocialArgs,
+  MutationDeleteStaffArgs,
+  MutationEditOperatingTimeArgs,
+  MutationEditProfileArgs,
+  MutationEditServiceArgs,
+  MutationEditSocialArgs,
+  MutationEditStaffArgs,
+  MutationSendMailArgs,
+  MutationSigninClientArgs,
+  MutationSigninProviderArgs,
+  MutationSignupClientArgs,
+  MutationSignupProviderArgs,
+} from "api/generated/graphqlTypes";
+
 export interface IUseSigninClient {
-  variables: { email: string; password: string };
+  variables: MutationSigninClientArgs;
 }
 
 export interface IUseSigninProvider {
-  variables: { email: string; password: string };
+  variables: MutationSigninProviderArgs;
 }
 
 export interface ISendEmail {
-  variables: {
-    fullName: string;
-    subject: string;
-    email: string;
-    message: string;
-  };
+  variables: MutationSendMailArgs;
 }
 
 export interface IUseSignupClient {
-  variables: {
-    fullName: string;
-    email: string;
-    password: string;
-    phoneNumber: string;
-  };
+  variables: MutationSignupClientArgs;
 }
 
 export interface IUseSignupProvider {
-  variables: {
-    fullName: string;
-    email: string;
-    password: string;
-    phoneNumber: string;
-  };
+  variables: MutationSignupProviderArgs;
 }
 
 export interface IUseEditProfile {
-  variables: {
-    fullName?: string;
-    streetNumber?: string;
-    streetName?: string;
-    suburbName?: string;
-    cityName?: string;
-    provinceName?: string;
-    areaCode?: string;
-    latitude?: number;
-    longitude?: number;
-  };
+  variables: MutationEditProfileArgs;
+}
+
+export interface IUseEditService {
+  variables: MutationEditServiceArgs;
+}
+
+export interface IUseEditStaff {
+  variables: MutationEditStaffArgs;
+}
+
+export interface IUseEditSocial {
+  variables: MutationEditSocialArgs;
+}
+
+export interface IUseAddService {
+  variables: MutationAddServiceArgs;
+}
+
+export interface IUseAddStaff {
+  variables: MutationAddStaffArgs;
+}
+
+export interface IUseAddGallery {
+  variables: MutationAddGalleryArgs;
+}
+
+export interface IUseAddSocial {
+  variables: MutationAddSocialArgs;
+}
+
+export interface IUseAddProviderProfile {
+  variables: MutationAddProviderProfileArgs;
+}
+
+export interface IUseDeleteService {
+  variables: MutationDeleteServiceArgs;
+}
+
+export interface IUseDeleteStaff {
+  variables: MutationDeleteStaffArgs;
+}
+
+export interface IUseDeleteGallery {
+  variables: MutationDeleteGalleryArgs;
+}
+
+export interface IUseDeleteSocial {
+  variables: MutationDeleteSocialArgs;
+}
+
+export interface IUseAddOperatingTime {
+  variables: MutationAddOperatingTimeArgs;
+}
+
+export interface IUseEditOperatingTime {
+  variables: MutationEditOperatingTimeArgs;
+}
+
+export interface IUseDeleteOperatingTime {
+  variables: MutationDeleteOperatingTimeArgs;
 }

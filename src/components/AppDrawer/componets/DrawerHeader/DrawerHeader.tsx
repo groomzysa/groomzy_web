@@ -1,11 +1,7 @@
 import React, { FC } from "react";
-import { Grid, Box, IconButton } from "@mui/material";
+import { Grid, Box, IconButton, Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import {
-  ChevronLeft,
-  ChevronRight,
-  PersonOutlineRounded,
-} from "@mui/icons-material";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 
 import { useApp } from "store";
 import { IDrawerHeaderProps } from "./types";
@@ -37,10 +33,15 @@ export const DrawerHeader: FC<IDrawerHeaderProps> = ({
           <Box marginLeft={2}>
             <Grid container alignItems="center">
               <Grid item>
-                <PersonOutlineRounded className={classes.white} />
+                <Avatar
+                  key={`${new Date()}`}
+                  alt={signedInUser?.fullName || "Profile placeholder"}
+                  src={signedInUser?.profileImageUrl as string}
+                  className={classes.avatar}
+                />
               </Grid>
               {signedInUser?.fullName ? (
-                <Grid item className={classes.white}>
+                <Grid item className={classes.name}>
                   {signedInUser.fullName}
                 </Grid>
               ) : null}

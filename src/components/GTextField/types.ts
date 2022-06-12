@@ -1,4 +1,9 @@
-import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from "react";
+import {
+  Dispatch,
+  HTMLInputTypeAttribute,
+  ReactNode,
+  SetStateAction,
+} from "react";
 
 export interface IGTextFieldProps {
   type?: HTMLInputTypeAttribute;
@@ -14,4 +19,7 @@ export interface IGTextFieldProps {
   disabled?: boolean;
   children?: any;
   isSelect?: boolean;
+  startIcon?: ReactNode;
+  placeholder?: string;
+  errorMessage?: string;
 }

@@ -1,5 +1,6 @@
+import { Provider, QueryProvidersArgs } from "api/generated/graphqlTypes";
 import { Dispatch } from "react";
-import { IAction, IProvider, IProvidersSearch, IUser } from "store/types";
+import { IAction, IUser } from "store/types";
 import {
   SET_PROVIDERS,
   SET_SIGNEDIN_USER,
@@ -8,7 +9,7 @@ import {
 
 export const setProvidersDispatch = (
   dispatch: Dispatch<IAction>,
-  providers: IProvider[]
+  providers: Provider[]
 ) => {
   dispatch({
     type: SET_PROVIDERS,
@@ -20,7 +21,7 @@ export const setProvidersDispatch = (
 
 export const setProvidersSearchDispatch = (
   dispatch: Dispatch<IAction>,
-  providersSearch: IProvidersSearch
+  providersSearch: QueryProvidersArgs
 ) => {
   dispatch({
     type: SET_PROVIDERS_SEARCH,

@@ -1,198 +1,198 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
-  CardMedia,
   IconButton,
   CardContent,
   Typography,
   Grid,
   Divider,
   Avatar,
+  CardActions,
 } from "@mui/material";
 import { uniq } from "lodash";
+import { useNavigate } from "react-router-dom";
+import Carousel from "react-material-ui-carousel";
 
-import { LocationOnOutlined, FavoriteOutlined } from "@mui/icons-material";
+import { LocationOnOutlined, VisibilityOutlined } from "@mui/icons-material";
 
-import { GLoadingSpinner } from "components";
-import { Category } from "store/types";
+import { GCategoryChip, GLoadingSpinner, GTextOverflow } from "components";
+import { GButton } from "components/GButton";
+import { PROVIDER_TRADING } from "utils/constants";
+import { Address, ProviderProfile } from "api/generated/graphqlTypes";
 
-import { CategoryChip } from "./components";
 import { IProviderProps } from "./types";
 import { useProviderHandlers } from "./hooks";
 import { useStyles } from "./styles";
 
 export const Provider: FC<IProviderProps> = ({
-  provider: { fullName, address, serviceProviderCategories },
+  provider: {
+    id,
+    fullName,
+    profileImageUrl,
+    address,
+    profile,
+    gallery,
+    serviceProviderCategories,
+  },
 }) => {
   const [distance, setDistance] = useState<string>("");
   const [loadingDistance, setLoadingDistance] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const classes = useStyles();
+  const hasCoordinates =
+    (profile?.tradingLatitude && profile.tradingLongitude) ||
+    (address?.latitude && address?.longitude);
+  const categories = uniq(
+    serviceProviderCategories?.map(({ category }) => category!.category) || []
+  );
+  /**
+   *
+   * Custom hooks
+   *
+   */
   const { handleAddress, handleDistance } = useProviderHandlers({
-    address,
+    address: address as Address,
+    profile: profile as ProviderProfile | undefined,
     setDistance,
     setLoadingDistance,
   });
-  const classes = useStyles();
-  const hasCoordinates = address?.latitude && address?.longitude;
-  const categories = uniq(
-    serviceProviderCategories?.map(
-      (serviceProviderCategory) => serviceProviderCategory.category.category
-    ) || []
-  );
+
+  /**
+   *
+   * Callbacks
+   *
+   */
+  const getDistance = useCallback(() => {
+    return handleDistance();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   /**
    *
    * Effects
    *
    */
   useEffect(() => {
-    handleDistance();
-
+    getDistance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /**
+   *
+   * Handlers
+   *
+   */
+  const handleToProviderServices = (id: number) => {
+    navigate(encodeURI(`${PROVIDER_TRADING.toLowerCase()}/${id}?tabIndex=0`));
+  };
 
   /**
    *
    * Templates
    *
    */
-  const categoryChips = categories.map((category) => {
-    switch (category) {
-      case Category.Barber:
-        return (
-          <CategoryChip
-            key={category}
-            category={category}
-            chipClassName={classes.baberChip}
-            className={classes.chipCaontainer}
-            size="small"
-          />
-        );
-      case Category.MakeupArtist:
-        return (
-          <CategoryChip
-            key={category}
-            category={category}
-            chipClassName={classes.makeupArtistChip}
-            className={classes.chipCaontainer}
-            size="small"
-          />
-        );
-      case Category.Hairdresser:
-        return (
-          <CategoryChip
-            key={category}
-            category={category}
-            chipClassName={classes.hairdresserChip}
-            className={classes.chipCaontainer}
-            size="small"
-          />
-        );
-      case Category.NailTechnician:
-        return (
-          <CategoryChip
-            key={category}
-            category={category}
-            chipClassName={classes.nailTechinicianChip}
-            className={classes.chipCaontainer}
-            size="small"
-          />
-        );
-      case Category.Spa:
-        return (
-          <CategoryChip
-            key={category}
-            category={category}
-            chipClassName={classes.spaChip}
-            className={classes.chipCaontainer}
-            size="small"
-          />
-        );
-      default:
-        return null;
-    }
+  const categoryChips = categories?.map((category) => {
+    return (
+      <GCategoryChip
+        key={category}
+        category={category}
+        className={classes.chipCaontainer}
+      />
+    );
   });
 
   return (
-    <Card sx={{ minHeight: 300 }}>
+    <Card className={classes.wrapper}>
       <CardHeader
         avatar={
-          <Avatar className={classes.avatar}>
-            <span className={classes.avatarText}>{fullName?.[0] || ""}</span>
-          </Avatar>
+          <Avatar
+            alt={fullName || "Profile placeholder"}
+            src={profileImageUrl as string}
+            className={classes.avatar}
+          />
         }
         title={<Typography>{fullName}</Typography>}
-        subheader={<Grid container>{categoryChips}</Grid>}
       />
-      <CardMedia
-        component="img"
-        height="230"
-        image="/placeholder.png"
-        alt="Image"
-      />
-      <CardContent>
-        <Grid container justifyContent="space-between">
-          <Grid item xs>
-            <Grid container direction="column">
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item>
-                    <IconButton
-                      className={`${!hasCoordinates ? classes.noPointer : ""} ${
-                        classes.locationIcon
-                      }`}
-                      onClick={() => {
-                        if (!hasCoordinates) return;
-                        window.open(
-                          `https://maps.google.com/?q=${address.latitude},${address.longitude}`
-                        );
-                      }}
-                      disableRipple
-                    >
-                      <LocationOnOutlined />
-                    </IconButton>
-                  </Grid>
-                  <Grid item className={classes.locationDistance}>
-                    {loadingDistance ? <GLoadingSpinner size={18} /> : distance}
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Divider light variant="middle" />
-              </Grid>
-              <Grid item xs>
-                <Grid container>
-                  <Grid item>{handleAddress()}</Grid>
-                </Grid>
-              </Grid>
-            </Grid>
+
+      <CardContent className={classes.cardContent}>
+        <Grid container direction="column">
+          <Grid item className={classes.carousel}>
+            <Carousel
+              height={220}
+              indicatorContainerProps={{
+                style: {
+                  position: "relative",
+                  top: -30,
+                  zIndex: 1,
+                },
+              }}
+            >
+              {(
+                gallery || [
+                  { id: 0, name: "Placeholder image", url: "/placeholder.png" },
+                ]
+              ).map((image) => (
+                <img
+                  key={image.id}
+                  src={image.url}
+                  className={classes.carouselImg}
+                  alt={image.name}
+                />
+              ))}
+            </Carousel>
+          </Grid>
+          <Grid item className={classes.categories}>
+            {categoryChips}
           </Grid>
           <Grid item>
-            <IconButton
-              className={classes.favIcon}
-              onClick={() => {}}
-              disableRipple
-            >
-              <FavoriteOutlined />
-            </IconButton>
+            <Divider light variant="middle" />
           </Grid>
+          <GTextOverflow
+            title={handleAddress() || ""}
+            id={id.toString()}
+            classname={classes.address}
+          />
         </Grid>
       </CardContent>
-      {/* <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
-      </CardActions> */}
+      <CardActions disableSpacing className={classes.actions}>
+        <Grid item>
+          <Grid container alignItems="center">
+            <Grid item>
+              <IconButton
+                className={`${!hasCoordinates ? classes.noPointer : ""} ${
+                  classes.locationIcon
+                }`}
+                onClick={() => {
+                  if (!hasCoordinates) return;
+                  window.open(
+                    `https://maps.google.com/?q=${
+                      profile?.tradingLatitude || address?.latitude
+                    },${profile?.tradingLongitude || address?.longitude}`
+                  );
+                }}
+                disableRipple
+              >
+                <LocationOnOutlined />
+              </IconButton>
+            </Grid>
+            <Grid item className={classes.locationDistance}>
+              {loadingDistance ? <GLoadingSpinner size={18} /> : distance}
+            </Grid>
+          </Grid>
+        </Grid>
+        <GButton
+          children={
+            <Grid container alignItems="center">
+              <VisibilityOutlined /> View
+            </Grid>
+          }
+          variant="outlined"
+          className={classes.button}
+          onClick={() => handleToProviderServices(id)}
+        />
+      </CardActions>
     </Card>
   );
 };

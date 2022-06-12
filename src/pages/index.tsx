@@ -1,6 +1,9 @@
-export { ProviderPage } from "./ProviderPage";
+export { ProvidersPage } from "./ProvidersPage";
 export { SignInPage } from "./SignInPage";
 export { AboutPage } from "./AboutPage";
 export { ContactsPage } from "./ContactsPage";
 export { SignupPage } from "./SignupPage";
 export { EditProfilePage } from "./EditProfilePage";
+export { ProviderTradingPage } from "./ProviderTradingPage";
+export { ProviderPage } from "./ProviderPage";
+export { NotFoundPage } from "./NotFoundPage";

@@ -7,8 +7,20 @@ export const SIGNIN_CLIENT_MUTATION = gql`
       email
       fullName
       phoneNumber
+      profileImageUrl
       token
       role
+      address {
+        id
+        streetNumber
+        streetName
+        suburbName
+        cityName
+        provinceName
+        areaCode
+        latitude
+        longitude
+      }
     }
   }
 `;

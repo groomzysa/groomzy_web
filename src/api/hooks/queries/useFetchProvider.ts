@@ -1,20 +1,17 @@
-import { PROVIDER_QUERY } from "api/graphql/queries";
-import request from "graphql-request";
-import jwt_decode from "jwt-decode";
 import { useQuery } from "react-query";
-import { IUser, Role } from "store/types";
+import { GraphQLResponse } from "graphql-request/dist/types";
 
-export const useFetchProvider = (token: string, signedInUser: IUser) => {
-  if (!process.env.REACT_APP_API_URL) {
-    throw new Error("No API endpoint defined");
-  }
+import { PROVIDER_QUERY } from "api/graphql/queries";
+import { getUserIdAndRole } from "utils/auth";
+import { graphqlRequestClient } from "utils/graphqlClient";
+import { Provider } from "api/generated/graphqlTypes";
+import { Role } from "store/types";
 
-  const endpoint: string = process.env.REACT_APP_API_URL;
+export const useFetchProvider = (token: string, signedInUser: Provider) => {
   let enabled: boolean = false;
 
   if (token) {
-    const role = jwt_decode<{ id: number; role: Role }>(token).role;
-    if (!signedInUser && role === Role.Provider) {
+    if (!signedInUser && getUserIdAndRole().role === Role.Provider) {
       enabled = true;
     } else {
       enabled = false;
@@ -24,19 +21,17 @@ export const useFetchProvider = (token: string, signedInUser: IUser) => {
   }
 
   const fetchProvider = async () => {
-    return await request(endpoint, PROVIDER_QUERY, undefined, {
-      authorization: `Bearer ${token}`,
-    });
+    return graphqlRequestClient().request(PROVIDER_QUERY, undefined);
   };
 
-  const { data, isLoading, error } = useQuery<{ provider: IUser }>(
+  const { data, isLoading, error } = useQuery<GraphQLResponse, Error, Provider>(
     "provider",
     fetchProvider,
-    { enabled: enabled }
+    { enabled: enabled, select: (data) => data?.provider }
   );
 
   //@ts-ignore
   const errorMessage = error?.response?.errors?.[0]?.message;
 
-  return { provider: data?.provider, isLoading, errorMessage };
+  return { provider: data, isLoading, errorMessage };
 };

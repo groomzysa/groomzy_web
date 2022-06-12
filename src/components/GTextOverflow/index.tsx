@@ -1,0 +1,1 @@
+export { GTextOverflow } from "./GTextOverflow";

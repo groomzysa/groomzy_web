@@ -26,5 +26,15 @@ export const useStyles = makeStyles(() => {
     cursor: {
       cursor: "pointer",
     },
+    button: {
+      "&.MuiButton-root": {
+        color: "white",
+        backgroundColor: blueGrey[500],
+        textTransform: "none",
+        "&:hover": {
+          backgroundColor: blueGrey[500],
+        },
+      },
+    },
   };
 });

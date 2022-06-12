@@ -1,20 +1,17 @@
-import { CLIENT_QUERY } from "api/graphql/queries";
-import request from "graphql-request";
-import jwt_decode from "jwt-decode";
 import { useQuery } from "react-query";
-import { IUser, Role } from "store/types";
+import { GraphQLResponse } from "graphql-request/dist/types";
 
-export const useFetchClient = (token: string, signedInUser: IUser) => {
-  if (!process.env.REACT_APP_API_URL) {
-    throw new Error("No API endpoint defined");
-  }
+import { CLIENT_QUERY } from "api/graphql/queries";
+import { getUserIdAndRole } from "utils/auth";
+import { graphqlRequestClient } from "utils/graphqlClient";
+import { Client } from "api/generated/graphqlTypes";
+import { Role } from "store/types";
 
-  const endpoint: string = process.env.REACT_APP_API_URL;
+export const useFetchClient = (token: string, signedInUser: Client) => {
   let enabled: boolean = false;
 
   if (token) {
-    const role = jwt_decode<{ id: number; role: Role }>(token).role;
-    if (!signedInUser && role === Role.Client) {
+    if (!signedInUser && getUserIdAndRole().role === Role.Client) {
       enabled = true;
     } else {
       enabled = false;
@@ -24,19 +21,17 @@ export const useFetchClient = (token: string, signedInUser: IUser) => {
   }
 
   const fetchClient = async () => {
-    return await request(endpoint, CLIENT_QUERY, undefined, {
-      authorization: `Bearer ${token}`,
-    });
+    return graphqlRequestClient().request(CLIENT_QUERY, undefined);
   };
 
-  const { data, isLoading, error } = useQuery<{ client: IUser }>(
+  const { data, isLoading, error } = useQuery<GraphQLResponse, Error, Client>(
     "client",
     fetchClient,
-    { enabled: enabled }
+    { enabled: enabled, select: (data) => data?.client }
   );
 
   //@ts-ignore
   const errorMessage = error?.response?.errors?.[0]?.message;
 
-  return { client: data?.client, isLoading, errorMessage };
+  return { client: data, isLoading, errorMessage };
 };

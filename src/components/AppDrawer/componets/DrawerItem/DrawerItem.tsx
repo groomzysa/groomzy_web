@@ -12,9 +12,10 @@ export const DrawerItem: FC<IDrawerItemProps> = ({
   icon,
   replace = false,
   onClick = () => {},
+  isLink = true,
 }) => {
   const classes = useStyles();
-  return (
+  return isLink ? (
     <Link
       className={classes.link}
       to={pathTo}
@@ -41,5 +42,26 @@ export const DrawerItem: FC<IDrawerItemProps> = ({
         <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
       </ListItemButton>
     </Link>
+  ) : (
+    <ListItemButton
+      key={text}
+      sx={{
+        minHeight: 48,
+        justifyContent: open ? "initial" : "center",
+        px: 2.5,
+      }}
+      onClick={onClick}
+    >
+      <ListItemIcon
+        sx={{
+          minWidth: 0,
+          mr: open ? 3 : "auto",
+          justifyContent: "center",
+        }}
+      >
+        {icon}
+      </ListItemIcon>
+      <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+    </ListItemButton>
   );
 };

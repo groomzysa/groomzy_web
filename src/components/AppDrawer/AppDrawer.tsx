@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import {
@@ -11,6 +11,7 @@ import {
   CssBaseline,
   IconButton,
   Grid,
+  ClickAwayListener,
 } from "@mui/material";
 import {
   ContactsOutlined,
@@ -26,9 +27,6 @@ import {
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
 
-import { DrawerHeader, DrawerItem } from "./componets";
-import { DRAWER_WIDTH } from "./constants";
-import { IAppBarProps } from "./types";
 import {
   ABOUT,
   CONTACTS,
@@ -39,14 +37,21 @@ import {
   SIGN_UP,
   TS_AND_CS,
 } from "utils/constants";
-import { useApp } from "store";
 import { useFetchClient, useFetchProvider } from "api/hooks/queries";
-import { getToken, setToken } from "utils/auth";
+import { getToken, getUserIdAndRole, setToken } from "utils/auth";
+import { useApp } from "store";
+import { Role } from "store/types";
+import { Client, Provider } from "api/generated/graphqlTypes";
+
+import { DrawerHeader, DrawerItem } from "./componets";
+import { DRAWER_WIDTH } from "./constants";
+import { IAppBarProps } from "./types";
 
 export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
   const [open, setOpen] = useState(false);
   const [pagename, setPageName] = useState<string>("Home");
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   /**
    *
@@ -54,8 +59,12 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
    *
    */
   const { signedInUser, setSignedInUser } = useApp();
-  const { client } = useFetchClient(getToken() || "", signedInUser);
-  const { provider } = useFetchProvider(getToken() || "", signedInUser);
+  const { id, role } = getUserIdAndRole();
+  const { client } = useFetchClient(getToken() || "", signedInUser as Client);
+  const { provider } = useFetchProvider(
+    getToken() || "",
+    signedInUser as Provider
+  );
 
   /**
    *
@@ -122,8 +131,10 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   const handleSignOut = () => {
+    navigate(encodeURI("/"), { replace: true });
     setToken("");
     setSignedInUser(undefined);
+    handleDrawerClose();
   };
 
   /**
@@ -177,6 +188,7 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
     flexShrink: 0,
     whiteSpace: "nowrap",
     boxSizing: "border-box",
+    zIndex: theme.zIndex.drawer - 1,
     ...(open && {
       ...openedMixin(theme),
       "& .MuiDrawer-paper": openedMixin(theme),
@@ -214,75 +226,90 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open} color="red">
-        <DrawerHeader handleDrawerClose={handleDrawerClose} open={open} />
-        <Divider />
-        <List>
-          <DrawerItem
-            text={HOME}
-            open={open}
-            pathTo={"/"}
-            icon={<HomeOutlined />}
-          />
-          <DrawerItem
-            text={ABOUT}
-            open={open}
-            pathTo={encodeURI(ABOUT.toLowerCase())}
-            icon={<InfoOutlined />}
-          />
-          <DrawerItem
-            text={CONTACTS}
-            open={open}
-            pathTo={encodeURI(CONTACTS.toLowerCase())}
-            icon={<ContactsOutlined />}
-          />
-        </List>
-        <Divider />
-        <List>
-          {signedInUser ? (
-            <DrawerItem
-              text={EDIT_PROFILE}
-              open={open}
-              pathTo={encodeURI(EDIT_PROFILE.toLowerCase())}
-              icon={<EditOutlined />}
-            />
-          ) : null}
-          {!signedInUser ? (
-            <DrawerItem
-              text={SIGN_IN}
-              open={open}
-              pathTo={encodeURI(SIGN_IN.toLowerCase())}
-              icon={<LoginOutlined />}
-            />
-          ) : null}
-          {!signedInUser ? (
-            <DrawerItem
-              text={SIGN_UP}
-              open={open}
-              pathTo={encodeURI(SIGN_UP.toLowerCase())}
-              icon={<PersonAddOutlined />}
-            />
-          ) : null}
-          {signedInUser ? (
-            <DrawerItem
-              text={SIGN_OUT}
-              open={open}
-              pathTo={"/"}
-              replace={true}
-              icon={<LogoutOutlined />}
-              onClick={handleSignOut}
-            />
-          ) : null}
-        </List>
-        <Divider />
-        <List>
-          <DrawerItem
-            text={TS_AND_CS}
-            open={open}
-            pathTo={encodeURI(TS_AND_CS.toLowerCase())}
-            icon={<PolicyOutlined />}
-          />
-        </List>
+
+      <Drawer variant="permanent" open={open}>
+        <ClickAwayListener onClickAway={open ? handleDrawerClose : () => {}}>
+          <Grid>
+            <DrawerHeader handleDrawerClose={handleDrawerClose} open={open} />
+            <Divider />
+            <List>
+              <DrawerItem
+                text={HOME}
+                open={open}
+                pathTo={
+                  role === Role.Provider ? encodeURI(`/${id}`) : encodeURI("/")
+                }
+                icon={<HomeOutlined />}
+                onClick={handleDrawerClose}
+              />
+              <DrawerItem
+                text={ABOUT}
+                open={open}
+                pathTo={encodeURI(ABOUT.toLowerCase())}
+                icon={<InfoOutlined />}
+                onClick={handleDrawerClose}
+              />
+              <DrawerItem
+                text={CONTACTS}
+                open={open}
+                pathTo={encodeURI(CONTACTS.toLowerCase())}
+                icon={<ContactsOutlined />}
+                onClick={handleDrawerClose}
+              />
+            </List>
+            <Divider />
+            <List>
+              {signedInUser ? (
+                <DrawerItem
+                  text={EDIT_PROFILE}
+                  open={open}
+                  pathTo={encodeURI(EDIT_PROFILE.toLowerCase())}
+                  icon={<EditOutlined />}
+                  onClick={handleDrawerClose}
+                />
+              ) : null}
+              {!signedInUser ? (
+                <DrawerItem
+                  text={SIGN_IN}
+                  open={open}
+                  pathTo={encodeURI(SIGN_IN.toLowerCase())}
+                  icon={<LoginOutlined />}
+                  onClick={handleDrawerClose}
+                />
+              ) : null}
+              {!signedInUser ? (
+                <DrawerItem
+                  text={SIGN_UP}
+                  open={open}
+                  pathTo={encodeURI(SIGN_UP.toLowerCase())}
+                  icon={<PersonAddOutlined />}
+                  onClick={handleDrawerClose}
+                />
+              ) : null}
+              {signedInUser ? (
+                <DrawerItem
+                  text={SIGN_OUT}
+                  open={open}
+                  pathTo={"/"}
+                  replace={true}
+                  icon={<LogoutOutlined />}
+                  onClick={handleSignOut}
+                  isLink={false}
+                />
+              ) : null}
+            </List>
+            <Divider />
+            <List>
+              <DrawerItem
+                text={TS_AND_CS}
+                open={open}
+                pathTo={encodeURI(TS_AND_CS.toLowerCase())}
+                icon={<PolicyOutlined />}
+                onClick={handleDrawerClose}
+              />
+            </List>
+          </Grid>
+        </ClickAwayListener>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Box marginTop={7}>{children}</Box>

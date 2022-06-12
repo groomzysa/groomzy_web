@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert, Grid } from "@mui/material";
+import { validate } from "email-validator";
 
 import { useSigninClient, useSigninProvider } from "api/hooks/mutations";
 import { SIGN_IN, SIGN_UP } from "utils/constants";
@@ -13,7 +14,9 @@ import { useStyles } from "./styles";
 
 export const SignInPage: FC = () => {
   const [email, setEmail] = useState<string>("");
+  const [emailError, setEmailError] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string>("");
   const [isProvider, setIsProvider] = useState<boolean>(false);
   const [signingIn, setSigningIn] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -65,7 +68,7 @@ export const SignInPage: FC = () => {
     setToken(provider?.token || "");
     setSignedInUser(provider);
     setSigningIn(false);
-    navigate("/", { replace: true });
+    navigate(`/${provider?.id}`, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [provider]);
 
@@ -75,11 +78,14 @@ export const SignInPage: FC = () => {
    *
    */
   const handleSigninClient = () => {
+    if (handleInputHasError()) return;
     signinClientMutate();
     setSigningIn(true);
   };
 
   const handleSigninProvider = () => {
+    if (handleInputHasError()) return;
+
     signinProviderMutate();
     setSigningIn(true);
   };
@@ -90,6 +96,27 @@ export const SignInPage: FC = () => {
 
   const handleJoinClick = () => {
     navigate(`/${encodeURI(SIGN_UP.toLowerCase())}`);
+  };
+
+  const handleInputHasError = () => {
+    let hasError = false;
+    if (!email) {
+      setEmailError("Email is required");
+      hasError = true;
+    } else if (!validate(email)) {
+      setEmailError("Email is not valid");
+      hasError = true;
+    }
+
+    if (!password) {
+      setPasswordError("Password is required");
+      hasError = true;
+    } else if (password.length < 5) {
+      setPasswordError("Password should contain at least 5 characters");
+      hasError = true;
+    }
+
+    return hasError;
   };
 
   const isLoading = signinClientLoading || signinProviderLoading;
@@ -114,6 +141,7 @@ export const SignInPage: FC = () => {
               setText={setEmail}
               textValue={email}
               disabled={isLoading}
+              errorMessage={emailError}
             />
           </Grid>
           <Grid className={classes.padTop10} item xs>
@@ -124,6 +152,7 @@ export const SignInPage: FC = () => {
               setText={setPassword}
               textValue={password}
               disabled={isLoading}
+              errorMessage={passwordError}
             />
           </Grid>
           <Grid className={classes.padTop10} item xs>
@@ -135,17 +164,26 @@ export const SignInPage: FC = () => {
           </Grid>
           <Grid className={classes.padTop10} item>
             <GButton
-              text={SIGN_IN}
+              children={SIGN_IN}
               onClick={isProvider ? handleSigninProvider : handleSigninClient}
+              className={classes.button}
+              loading={isLoading}
             />
           </Grid>
           <Grid item>
             <Grid container justifyContent="space-between">
               <Grid className={classes.padTop10} item>
-                <GButton text="Forgot password" />
+                <GButton
+                  children="Forgot password"
+                  className={classes.button}
+                />
               </Grid>
               <Grid className={classes.padTop10} item>
-                <GButton text="Want to join?" onClick={handleJoinClick} />
+                <GButton
+                  children="Want to join?"
+                  onClick={handleJoinClick}
+                  className={classes.button}
+                />
               </Grid>
             </Grid>
           </Grid>

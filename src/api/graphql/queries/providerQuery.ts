@@ -6,6 +6,7 @@ export const PROVIDER_QUERY = gql`
       id
       email
       fullName
+      profileImageUrl
       address {
         id
         streetNumber

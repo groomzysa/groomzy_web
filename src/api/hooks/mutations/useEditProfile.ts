@@ -1,22 +1,17 @@
-import request from "graphql-request";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 import { EDIT_PROFILE_MUTATION } from "api/graphql/mutations";
-import { getToken } from "utils/auth";
-import { IMessage } from "store/types";
+import { getUserIdAndRole } from "utils/auth";
+import { graphqlRequestClient } from "utils/graphqlClient";
+import { IMessage, Role } from "store/types";
+
 import { IUseEditProfile } from "./types";
 
 export const useEditProfile = ({ variables }: IUseEditProfile) => {
-  if (!process.env.REACT_APP_API_URL) {
-    throw new Error("No API endpoint defined");
-  }
-
-  const endpoint: string = process.env.REACT_APP_API_URL;
+  const queryClient = useQueryClient();
 
   const editProfile = async () => {
-    return await request(endpoint, EDIT_PROFILE_MUTATION, variables, {
-      authorization: `Bearer ${getToken()}`,
-    });
+    return graphqlRequestClient().request(EDIT_PROFILE_MUTATION, variables);
   };
 
   const {
@@ -27,7 +22,17 @@ export const useEditProfile = ({ variables }: IUseEditProfile) => {
     isError,
   } = useMutation<{
     editProfile: IMessage;
-  }>("editProfile", editProfile);
+  }>("editProfile", editProfile, {
+    onSuccess: (data) => {
+      const user = getUserIdAndRole();
+      const isProvider = user.role === Role.Provider;
+      //@ts-ignore
+      queryClient.setQueryData(
+        [isProvider ? "provider" : "client", { id: user.id }],
+        data
+      );
+    },
+  });
 
   //@ts-ignore
   const errorMessage = error?.response?.errors?.[0]?.message;

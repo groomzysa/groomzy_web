@@ -1,8 +1,16 @@
-import { blue, blueGrey, green, pink, purple, red } from "@mui/material/colors";
+import { blueGrey, red } from "@mui/material/colors";
 import { makeStyles } from "@mui/styles";
 
 export const useStyles = makeStyles(() => {
   return {
+    wrapper: {
+      height: 415,
+    },
+    cardContent: {
+      "&.MuiCardContent-root": {
+        padding: 0,
+      },
+    },
     noPointer: {
       "&:hover": {
         cursor: "default",
@@ -18,38 +26,9 @@ export const useStyles = makeStyles(() => {
       top: -2,
       right: 10,
     },
-    baberChip: {
-      "&.MuiChip-root": {
-        backgroundColor: blue[500],
-        color: "white",
-      },
-    },
-    makeupArtistChip: {
-      "&.MuiChip-root": {
-        backgroundColor: pink[500],
-        color: "white",
-      },
-    },
-    nailTechinicianChip: {
-      "&.MuiChip-root": {
-        backgroundColor: purple[500],
-        color: "white",
-      },
-    },
-    hairdresserChip: {
-      "&.MuiChip-root": {
-        backgroundColor: green[500],
-        color: "white",
-      },
-    },
-    spaChip: {
-      "&.MuiChip-root": {
-        backgroundColor: red[500],
-        color: "white",
-      },
-    },
     chipCaontainer: {
       paddingRight: 5,
+      paddingBottom: 5,
     },
     favIcon: {
       color: "transparent",
@@ -58,11 +37,47 @@ export const useStyles = makeStyles(() => {
       },
     },
     avatar: {
-      color: blueGrey[500],
+      "&.MuiAvatar-root": {
+        backgroundColor: "whitesmoke",
+        color: blueGrey[500],
+      },
     },
     avatarText: {
       color: "white",
       fontWeight: "bold",
+    },
+    actions: {
+      justifyContent: "space-between",
+    },
+    button: {
+      "&.MuiButton-root": {
+        borderColor: blueGrey[500],
+        color: blueGrey[500],
+        textTransform: "none",
+        "&:hover": {
+          borderColor: blueGrey[500],
+          color: blueGrey[500],
+        },
+      },
+    },
+    address: {
+      paddingLeft: 10,
+    },
+    categories: {
+      position: "relative",
+      display: "flex",
+      width: "100%",
+      overflowX: "auto",
+      height: 45,
+      paddingLeft: 10,
+    },
+    carousel: {
+      height: 220,
+    },
+    carouselImg: {
+      objectFit: "cover",
+      width: "100%",
+      height: "100%",
     },
   };
 });

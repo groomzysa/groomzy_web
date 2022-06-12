@@ -6,6 +6,31 @@ export const PROVIDERS_QUERY = gql`
       id
       email
       fullName
+      profileImageUrl
+      profile {
+        id
+        tradingAreaCode
+        tradingCityName
+        tradingLatitude
+        tradingLongitude
+        tradingName
+        tradingProfileImageUrl
+        tradingProvinceName
+        tradingStreetName
+        tradingStreetNumber
+        tradingSuburbName
+      }
+      gallery {
+        id
+        fileName
+        name
+        url
+      }
+      socials {
+        id
+        name
+        url
+      }
       address {
         id
         streetNumber

@@ -5,23 +5,19 @@ import {
   useContext,
   useReducer,
 } from "react";
+import { Provider, QueryProvidersArgs } from "api/generated/graphqlTypes";
 import {
   setProvidersDispatch,
   setProvidersSearchDispatch,
   setSignedInUserDispatch,
 } from "store/action";
 import { appReducer, initialState } from "store/reducer";
-import {
-  IAppProviderProps,
-  IProvider,
-  IProvidersSearch,
-  IUser,
-} from "store/types";
+import { IAppProviderProps, IUser } from "store/types";
 
 const initialAppProviderValue = {
   ...initialState,
-  setProviders: (_: IProvider[]) => {},
-  setProvidersSearch: (_: IProvidersSearch) => {},
+  setProviders: (_: Provider[]) => {},
+  setProvidersSearch: (_: QueryProvidersArgs) => {},
   setSignedInUser: (_?: IUser) => {},
 };
 
@@ -37,11 +33,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
    * Dispatches
    *
    */
-  const setProviders = (providers: IProvider[]) => {
+  const setProviders = (providers: Provider[]) => {
     setProvidersDispatch(dispatch, state.providers.concat(providers));
   };
 
-  const setProvidersSearch = (providersSearch: IProvidersSearch) => {
+  const setProvidersSearch = (providersSearch: QueryProvidersArgs) => {
     setProvidersSearchDispatch(dispatch, providersSearch);
   };
 

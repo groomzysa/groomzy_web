@@ -6,4 +6,5 @@ export interface IGSelectProps {
   options: ISelectOption[];
   setSelect: (option: ISelectOption) => void;
   value?: ISelectOption;
+  disabled?: boolean;
 }
