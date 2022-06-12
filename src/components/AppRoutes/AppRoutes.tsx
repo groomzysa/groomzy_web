@@ -28,7 +28,6 @@ export const AppRoutes: FC = () => {
   const { pathname } = useLocation();
   let navigate = useNavigate();
   const { id, role } = getUserIdAndRole();
-  const uri = process.env.REACT_APP_BASE_URI || "";
 
   const redirectToProviderPaget = useCallback(() => {
     if (pathname === "/" && role === Role.Provider) {
@@ -46,37 +45,28 @@ export const AppRoutes: FC = () => {
 
   return (
     <Routes>
-      <Route path={encodeURI(uri)} element={<ProvidersPage />} />
+      <Route path={encodeURI("/")} element={<ProvidersPage />} />
 
-      <Route path={encodeURI(`${uri}/:id/*`)} element={<ProviderPage />} />
+      <Route path={encodeURI("/:id/*")} element={<ProviderPage />} />
 
-      <Route
-        path={encodeURI(`${uri}/${ABOUT.toLowerCase()}`)}
-        element={<AboutPage />}
-      />
+      <Route path={encodeURI(ABOUT.toLowerCase())} element={<AboutPage />} />
 
       <Route
-        path={encodeURI(`${uri}/${CONTACTS.toLowerCase()}`)}
+        path={encodeURI(CONTACTS.toLowerCase())}
         element={<ContactsPage />}
       />
 
-      <Route
-        path={encodeURI(`${uri}/${SIGN_IN.toLowerCase()}`)}
-        element={<SignInPage />}
-      />
+      <Route path={encodeURI(SIGN_IN.toLowerCase())} element={<SignInPage />} />
+
+      <Route path={encodeURI(SIGN_UP.toLowerCase())} element={<SignupPage />} />
 
       <Route
-        path={encodeURI(`${uri}/${SIGN_UP.toLowerCase()}`)}
-        element={<SignupPage />}
-      />
-
-      <Route
-        path={encodeURI(`${uri}/${EDIT_PROFILE.toLowerCase()}`)}
+        path={encodeURI(EDIT_PROFILE.toLowerCase())}
         element={<EditProfilePage />}
       />
 
       <Route
-        path={encodeURI(`${uri}/${PROVIDER_TRADING.toLowerCase()}/:id/*`)}
+        path={encodeURI(`${PROVIDER_TRADING.toLowerCase()}/:id/*`)}
         element={<ProviderTradingPage />}
       />
 
