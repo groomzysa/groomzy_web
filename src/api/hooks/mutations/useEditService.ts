@@ -1,17 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { EDIT_SERVICE_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Message, Service } from "api/generated/graphqlTypes";
+import { useEditServiceMutation } from "api/generated/schema";
 
-import { IUseEditService } from "./types";
-
-export const useEditService = ({ variables }: IUseEditService) => {
+export const useEditService = () => {
   const queryClient = useQueryClient();
-
-  const editService = async () => {
-    return graphqlRequestClient().request(EDIT_SERVICE_MUTATION, variables);
-  };
 
   const {
     mutate: editServiceMutate,
@@ -19,24 +12,8 @@ export const useEditService = ({ variables }: IUseEditService) => {
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    editService: { message: Message; service: Service };
-  }>("editService", editService, {
-    onSuccess: (data) => {
-      //@ts-ignore
-      queryClient.setQueryData("providerServices", ({ providerServices }) => {
-        const newProviderServices = providerServices?.map(
-          (providerService: Service) => {
-            if (providerService.id === data.editService.service.id) {
-              return data.editService.service;
-            }
-            return providerService;
-          }
-        );
-
-        return { providerServices: newProviderServices };
-      });
-    },
+  } = useEditServiceMutation(graphqlRequestClient(), {
+    onSuccess: () => queryClient.invalidateQueries("providerServicesQuery"),
   });
 
   //@ts-ignore

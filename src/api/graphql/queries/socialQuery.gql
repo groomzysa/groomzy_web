@@ -1,0 +1,7 @@
+query socialQuery($id: Int!) {
+  social(id: $id) {
+    id
+    name
+    url
+  }
+}

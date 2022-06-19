@@ -45,20 +45,7 @@ export const EditProfilePage: FC = () => {
     editProfileLoading: isLoading,
     editProfileHasError,
     editProfileErrorMessage,
-  } = useEditProfile({
-    variables: {
-      fullName,
-      streetNumber,
-      streetName,
-      suburbName,
-      cityName,
-      provinceName: provinceName?.value,
-      areaCode,
-      latitude,
-      longitude,
-      profileImage,
-    },
-  });
+  } = useEditProfile();
 
   /**
    *
@@ -98,7 +85,18 @@ export const EditProfilePage: FC = () => {
   const handleEditProfile = async () => {
     const proceed = await handleGetLatLng();
     if (proceed) {
-      editProfileMutate();
+      editProfileMutate({
+        fullName,
+        streetNumber,
+        streetName,
+        suburbName,
+        cityName,
+        provinceName: provinceName?.value,
+        areaCode,
+        latitude,
+        longitude,
+        profileImage,
+      });
     }
   };
 

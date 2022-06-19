@@ -1,25 +1,14 @@
-import { useMutation } from "react-query";
-
-import { SIGNIN_CLIENT_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Client } from "api/generated/graphqlTypes";
+import { useSigninClientMutation } from "api/generated/schema";
 
-import { IUseSigninClient } from "./types";
-
-export const useSigninClient = ({ variables }: IUseSigninClient) => {
-  const signiClient = async () => {
-    return graphqlRequestClient().request(SIGNIN_CLIENT_MUTATION, variables);
-  };
-
+export const useSigninClient = () => {
   const {
     mutate: signinClientMutate,
     data,
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    signinClient: Client;
-  }>("signiClient", signiClient);
+  } = useSigninClientMutation(graphqlRequestClient());
 
   //@ts-ignore
   const errorMessage = error?.response?.errors?.[0]?.message;

@@ -1,0 +1,12 @@
+mutation editSocialMutation($socialId: Int!, $name: String, $url: String) {
+  editSocial(socialId: $socialId, name: $name, url: $url) {
+    message {
+      message
+    }
+    social {
+      id
+      name
+      url
+    }
+  }
+}

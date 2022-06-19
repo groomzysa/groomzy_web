@@ -8,6 +8,7 @@ export const GCheckBox: FC<IGCheckBoxProps> = ({
   checked,
   label = null,
   onClick = () => {},
+  disabled = false,
 }) => {
   const classes = useStyles();
   return (
@@ -18,6 +19,7 @@ export const GCheckBox: FC<IGCheckBoxProps> = ({
             checked={checked}
             onClick={onClick}
             className={classes.checkBox}
+            disabled={disabled}
           />
         }
         label={label}

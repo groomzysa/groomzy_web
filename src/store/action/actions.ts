@@ -1,4 +1,4 @@
-import { Provider, QueryProvidersArgs } from "api/generated/graphqlTypes";
+import { Provider, QueryProvidersArgs } from "api/generated/schema";
 import { IAppState, IUser } from "store/types";
 
 export const setProvidersAction = (state: IAppState, providers: Provider[]) => {

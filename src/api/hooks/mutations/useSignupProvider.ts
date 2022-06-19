@@ -1,25 +1,14 @@
-import { useMutation } from "react-query";
-
-import { SIGNUP_PROVIDER_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { IMessage } from "store/types";
+import { useSignupProviderMutation } from "api/generated/schema";
 
-import { IUseSignupProvider } from "./types";
-
-export const useSignupProvider = ({ variables }: IUseSignupProvider) => {
-  const signupProvider = async () => {
-    return graphqlRequestClient().request(SIGNUP_PROVIDER_MUTATION, variables);
-  };
-
+export const useSignupProvider = () => {
   const {
     mutate: signupProviderMutate,
     data,
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    signupProvider: IMessage;
-  }>("signupProvider", signupProvider);
+  } = useSignupProviderMutation(graphqlRequestClient());
 
   //@ts-ignore
   const errorMessage = error?.response?.errors?.[0]?.message;

@@ -1,0 +1,17 @@
+query providerServicesQuery($providerId: Int!) {
+  providerServices(providerId: $providerId) {
+    id
+    description
+    duration
+    durationUnit
+    inHouse
+    price
+    title
+    serviceProviderCategories {
+      category {
+        id
+        category
+      }
+    }
+  }
+}

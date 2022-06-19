@@ -1,8 +1,4 @@
-import {
-  Client,
-  Provider,
-  QueryProvidersArgs,
-} from "api/generated/graphqlTypes";
+import { Client, Provider, QueryProvidersArgs } from "api/generated/schema";
 
 /**
  *
@@ -75,4 +71,4 @@ export interface ISelectOption {
  *
  */
 
-export type IUser = Client | Provider | undefined;
+export type IUser = Client | Provider | undefined | null;

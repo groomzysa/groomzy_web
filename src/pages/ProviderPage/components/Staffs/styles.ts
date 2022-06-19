@@ -1,12 +1,18 @@
+import { Theme } from "@mui/material";
 import { orange, blue, blueGrey, red, green } from "@mui/material/colors";
 import { makeStyles } from "@mui/styles";
 
-export const useStyles = makeStyles(() => {
+export const useStyles = makeStyles((theme: Theme) => {
   return {
     tableWrapper: {
       height: "auto",
       overflow: "auto",
       width: "100%",
+      [theme.breakpoints.up("sm")]: {
+        position: "relative",
+        left: "25%",
+        width: "50%",
+      },
     },
     dataGrid: {
       "&.MuiDataGrid-root": {

@@ -1,0 +1,14 @@
+query providerOperatingTimesQuery($providerId: Int!) {
+  providerOperatingTimes(providerId: $providerId) {
+    id
+    day {
+      id
+      day
+    }
+    time {
+      id
+      startTime
+      endTime
+    }
+  }
+}

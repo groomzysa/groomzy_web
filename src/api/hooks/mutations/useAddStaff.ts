@@ -1,17 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { ADD_STAFF_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Message, Staff } from "api/generated/graphqlTypes";
+import { useAddStaffMutation } from "api/generated/schema";
 
-import { IUseAddStaff } from "./types";
-
-export const useAddStaff = ({ variables }: IUseAddStaff) => {
+export const useAddStaff = () => {
   const queryClient = useQueryClient();
-
-  const addStaff = async () => {
-    return graphqlRequestClient().request(ADD_STAFF_MUTATION, variables);
-  };
 
   const {
     mutate: addStaffMutate,
@@ -19,15 +12,8 @@ export const useAddStaff = ({ variables }: IUseAddStaff) => {
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    addStaff: { message: Message; staff: Staff };
-  }>("addStaff", addStaff, {
-    onSuccess: (data) => {
-      queryClient.setQueryData("providerStaffs", ({ providerStaffs }) => {
-        const newProviderStaffs = [data.addStaff.staff, ...providerStaffs];
-        return { providerStaffs: newProviderStaffs };
-      });
-    },
+  } = useAddStaffMutation(graphqlRequestClient(), {
+    onSuccess: () => queryClient.invalidateQueries("providerStaffsQuery"),
   });
 
   //@ts-ignore

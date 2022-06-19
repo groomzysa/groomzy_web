@@ -1,4 +1,4 @@
-import { Service } from "api/generated/graphqlTypes";
+import { Service } from "api/generated/schema";
 
 type classesRecord = Record<
   "padRight10" | "viewButton" | "editButton" | "deleteButton" | "headerName",

@@ -8,8 +8,12 @@ export const GCenterMessage: FC<IGCenterMessageProps> = ({ message }) => {
   const classes = useStyles();
 
   return (
-    <Grid>
-      <Box className={classes.wrapper}>{message}</Box>
+    <Grid container>
+      <Grid item md={4}></Grid>
+      <Grid item md={4}>
+        <Box className={classes.wrapper}>{message}</Box>
+      </Grid>
+      <Grid item md={4}></Grid>
     </Grid>
   );
 };

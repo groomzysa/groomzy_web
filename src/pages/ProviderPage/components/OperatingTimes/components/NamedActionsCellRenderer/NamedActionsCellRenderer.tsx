@@ -1,5 +1,9 @@
 import React, { FC } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Grid, Menu, MenuItem, Tooltip } from "@mui/material";
 import {
   VisibilityOutlined,
@@ -19,6 +23,7 @@ import { useStyles } from "./styles";
 export const NamedActionsCellRenderer: FC<INamedActionsCellRendererProps> = ({
   params,
 }) => {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const popupState = usePopupState({
     variant: "popper",
@@ -26,6 +31,17 @@ export const NamedActionsCellRenderer: FC<INamedActionsCellRendererProps> = ({
   });
 
   const classes = useStyles();
+
+  /**
+   *
+   * Handlers
+   *
+   */
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "1",
+    }).toString();
+  };
 
   return (
     <>
@@ -44,7 +60,10 @@ export const NamedActionsCellRenderer: FC<INamedActionsCellRendererProps> = ({
             container
             justifyContent="space-between"
             onClick={() =>
-              navigate(encodeURI(`view_operating_time/${params.row.id}`))
+              navigate({
+                pathname: encodeURI(`view_operating_time/${params.row.id}`),
+                search: handleCreateTabIndexSearchParam(),
+              })
             }
           >
             <Grid item>View</Grid>
@@ -59,7 +78,10 @@ export const NamedActionsCellRenderer: FC<INamedActionsCellRendererProps> = ({
             container
             justifyContent="space-between"
             onClick={() =>
-              navigate(encodeURI(`edit_operating_time/${params.row.id}`))
+              navigate({
+                pathname: encodeURI(`edit_operating_time/${params.row.id}`),
+                search: handleCreateTabIndexSearchParam(),
+              })
             }
           >
             <Grid item>Edit</Grid>
@@ -74,7 +96,10 @@ export const NamedActionsCellRenderer: FC<INamedActionsCellRendererProps> = ({
             container
             justifyContent="space-between"
             onClick={() =>
-              navigate(encodeURI(`delete_operating_time/${params.row.id}`))
+              navigate({
+                pathname: encodeURI(`delete_operating_time/${params.row.id}`),
+                search: handleCreateTabIndexSearchParam(),
+              })
             }
           >
             <Grid item>Delete</Grid>

@@ -1,17 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { DELETE_SOCIAL_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Message, ProviderSocial } from "api/generated/graphqlTypes";
+import { useDeleteSocialMutation } from "api/generated/schema";
 
-import { IUseDeleteSocial } from "./types";
-
-export const useDeleteSocial = ({ variables }: IUseDeleteSocial) => {
+export const useDeleteSocial = () => {
   const queryClient = useQueryClient();
-
-  const deleteSocial = async () => {
-    return graphqlRequestClient().request(DELETE_SOCIAL_MUTATION, variables);
-  };
 
   const {
     mutate: deleteSocialMutate,
@@ -19,18 +12,8 @@ export const useDeleteSocial = ({ variables }: IUseDeleteSocial) => {
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    deleteSocial: { message: Message; social: ProviderSocial };
-  }>("deleteSocial", deleteSocial, {
-    onSuccess: (data) => {
-      queryClient.setQueryData("providerSocials", ({ providerSocials }) => {
-        const newProviderSocials = providerSocials.filter(
-          (providerSocial: ProviderSocial) =>
-            providerSocial.id !== data.deleteSocial.social.id
-        );
-        return { providerSocials: newProviderSocials };
-      });
-    },
+  } = useDeleteSocialMutation(graphqlRequestClient(), {
+    onSuccess: () => queryClient.invalidateQueries("providerSocialsQuery"),
   });
 
   //@ts-ignore

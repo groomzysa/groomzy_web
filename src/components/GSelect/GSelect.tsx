@@ -12,6 +12,9 @@ export const GSelect: FC<IGSelectProps> = ({
   setSelect,
   value,
   disabled = false,
+  placeholder = "",
+  errorMessage = "",
+  resetErrorMessage = () => {},
 }) => {
   /**
    *
@@ -21,7 +24,8 @@ export const GSelect: FC<IGSelectProps> = ({
   const handleChange = (value: string) => {
     const selectedOption = options.find((option) => option.value === value);
     if (!selectedOption) return;
-    setSelect(selectedOption);
+
+    setSelect(selectedOption.value === "None" ? undefined : selectedOption);
   };
 
   return (
@@ -32,6 +36,9 @@ export const GSelect: FC<IGSelectProps> = ({
       setText={handleChange}
       textValue={value?.value || ""}
       disabled={disabled}
+      errorMessage={errorMessage}
+      resetErrorMessage={resetErrorMessage}
+      placeholder={placeholder}
     >
       {options.map((option) => (
         <MenuItem key={option.id} value={option.value}>

@@ -1,0 +1,14 @@
+query operatingTimeQuery($id: Int!) {
+  operatingTime(id: $id) {
+    id
+    day {
+      id
+      day
+    }
+    time {
+      id
+      startTime
+      endTime
+    }
+  }
+}

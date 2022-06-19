@@ -11,7 +11,7 @@ import {
   QueryServiceArgs,
   QuerySocialArgs,
   QueryStaffArgs,
-} from "api/generated/graphqlTypes";
+} from "api/generated/schema";
 
 export interface IUseFetchProviders {
   variables: QueryProvidersArgs;

@@ -1,17 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { ADD_GALLERY_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Message, ProviderGallery } from "api/generated/graphqlTypes";
+import { useAddGalleryMutation } from "api/generated/schema";
 
-import { IUseAddGallery } from "./types";
-
-export const useAddGallery = ({ variables }: IUseAddGallery) => {
+export const useAddGallery = () => {
   const queryClient = useQueryClient();
-
-  const addGallery = async () => {
-    return graphqlRequestClient().request(ADD_GALLERY_MUTATION, variables);
-  };
 
   const {
     mutate: addGalleryMutate,
@@ -19,18 +12,8 @@ export const useAddGallery = ({ variables }: IUseAddGallery) => {
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    addGallery: { message: Message; gallery: ProviderGallery };
-  }>("addGallery", addGallery, {
-    onSuccess: (data) => {
-      queryClient.setQueryData("providerGallery", ({ providerGallery }) => {
-        const newProviderGallery = [
-          data.addGallery.gallery,
-          ...providerGallery,
-        ];
-        return { providerGallery: newProviderGallery };
-      });
-    },
+  } = useAddGalleryMutation(graphqlRequestClient(), {
+    onSuccess: () => queryClient.invalidateQueries("providerGalleryQuery"),
   });
 
   //@ts-ignore

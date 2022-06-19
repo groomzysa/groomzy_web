@@ -1,20 +1,12 @@
-import { useQuery } from "react-query";
-import { GraphQLResponse } from "graphql-request/dist/types";
-
-import { SERVICE_QUERY } from "api/graphql/queries";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Service } from "api/generated/graphqlTypes";
+import { useServiceQuery } from "api/generated/schema";
 
 import { IUseFetchService } from "./types";
 
 export const useFetchService = ({ variables }: IUseFetchService) => {
-  const fetchService = async () => {
-    return graphqlRequestClient().request(SERVICE_QUERY, variables);
-  };
-
-  const { data, isLoading, error } = useQuery<GraphQLResponse, Error, Service>(
-    "service",
-    fetchService,
+  const { data, isLoading, error } = useServiceQuery(
+    graphqlRequestClient(),
+    variables,
     { enabled: !!variables?.id, select: (data) => data?.service }
   );
 

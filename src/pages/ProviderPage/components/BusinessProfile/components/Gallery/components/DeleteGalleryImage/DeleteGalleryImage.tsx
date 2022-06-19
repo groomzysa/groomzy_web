@@ -1,9 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useSearchParams,
+  createSearchParams,
+} from "react-router-dom";
 import { Alert, DialogActions, Grid, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 
-import { setLocalStorage } from "utils/localStorage";
 import { GButton, GDialogBox, GTextField } from "components";
 import { useFetchGallery } from "api/hooks/queries";
 import { useDeleteGallery } from "api/hooks/mutations";
@@ -12,6 +16,7 @@ import { useStyles } from "./styles";
 
 export const DeleteGalleryImage: FC = () => {
   const { id, galleryId } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [deleteGallerySuccessMessage, setDeleteGallerySuccessMessage] =
     useState<string>();
@@ -32,12 +37,7 @@ export const DeleteGalleryImage: FC = () => {
     deleteGalleryLoading,
     deleteGalleryErrorMessage,
     deleteGalleryHasError,
-  } = useDeleteGallery({
-    variables: {
-      galleryId: Number(galleryId),
-      fileName: gallery?.fileName || "",
-    },
-  });
+  } = useDeleteGallery();
 
   /**
    *
@@ -70,12 +70,23 @@ export const DeleteGalleryImage: FC = () => {
    *
    */
   const handleDeleteGallery = async () => {
-    deleteGalleryMutate();
+    deleteGalleryMutate({
+      galleryId: Number(galleryId),
+      fileName: gallery?.fileName || "",
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "3",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

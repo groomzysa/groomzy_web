@@ -40,9 +40,7 @@ export const SignupPage: FC = () => {
     signupClientLoading,
     signupClientErrorMessage,
     signupClientHasError,
-  } = useSignupClient({
-    variables: { email, password, fullName, phoneNumber: phoneNumber || "" },
-  });
+  } = useSignupClient();
 
   const {
     signupProviderMutate,
@@ -50,9 +48,7 @@ export const SignupPage: FC = () => {
     signupProviderLoading,
     signupProviderErrorMessage,
     signupProviderHasError,
-  } = useSignupProvider({
-    variables: { email, password, fullName, phoneNumber: phoneNumber || "" },
-  });
+  } = useSignupProvider();
 
   /**
    *
@@ -90,12 +86,22 @@ export const SignupPage: FC = () => {
    */
   const handleSignupClient = () => {
     if (handleInputHasError()) return;
-    signupClientMutate();
+    signupClientMutate({
+      email,
+      password,
+      fullName,
+      phoneNumber: phoneNumber || "",
+    });
   };
 
   const handleSignupProvider = () => {
     if (handleInputHasError()) return;
-    signupProviderMutate();
+    signupProviderMutate({
+      email,
+      password,
+      fullName,
+      phoneNumber: phoneNumber || "",
+    });
   };
 
   const handleIsProvider = () => {
@@ -134,6 +140,8 @@ export const SignupPage: FC = () => {
     } else if (isProvider && !isValidPhoneNumber(String(phoneNumber))) {
       setPhoneNumberError("Phone number is not valid");
       hasError = true;
+    } else {
+      setPhoneNumberError("");
     }
 
     return hasError;
@@ -167,6 +175,7 @@ export const SignupPage: FC = () => {
               textValue={fullName}
               disabled={isLoading}
               errorMessage={fullNameError}
+              resetErrorMessage={setFullNameError}
             />
           </Grid>
           <Grid className={classes.padTop10} item xs>
@@ -178,6 +187,7 @@ export const SignupPage: FC = () => {
               textValue={email}
               disabled={isLoading}
               errorMessage={emailError}
+              resetErrorMessage={setEmailError}
             />
           </Grid>
 
@@ -190,6 +200,7 @@ export const SignupPage: FC = () => {
               textValue={password}
               disabled={isLoading}
               errorMessage={passwordError}
+              resetErrorMessage={setPasswordError}
             />
           </Grid>
           <Grid className={classes.padTop10} item xs>
@@ -197,6 +208,7 @@ export const SignupPage: FC = () => {
               checked={isProvider}
               onClick={handleIsProvider}
               label="Service provider ?"
+              disabled={isLoading}
             />
           </Grid>
           {isProvider && (

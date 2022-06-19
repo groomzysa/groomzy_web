@@ -1,22 +1,29 @@
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  createSearchParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, Button, DialogActions, Grid, Typography } from "@mui/material";
+import { ImageOutlined } from "@mui/icons-material";
 import { isEmpty } from "lodash";
 import clsx from "clsx";
 
 import { useAddGallery } from "api/hooks/mutations";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GButton, GDialogBox, GImageCrop, GTextField } from "components";
 
 import { useStyles } from "./styles";
-import { ImageOutlined } from "@mui/icons-material";
 
 export const AddGalleryImage: FC = () => {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
+  const [nameError, setNameError] = useState<string>("");
   const [galleryImage, setGalleryImage] = useState<File>();
+  const [galleryImageError, setGalleryImageError] = useState<string>();
   const [galleryViewImage, setGalleryViewImage] = useState<string>();
   const [rawGalleryImage, setRawGalleryImage] = useState<File>();
   const [addGallerySuccessMessage, setAddGallerySuccessMessage] =
@@ -36,12 +43,7 @@ export const AddGalleryImage: FC = () => {
     addGalleryLoading,
     addGalleryErrorMessage,
     addGalleryHasError,
-  } = useAddGallery({
-    variables: {
-      name,
-      galleryImageFile: galleryImage,
-    },
-  });
+  } = useAddGallery();
 
   /**
    *
@@ -72,13 +74,24 @@ export const AddGalleryImage: FC = () => {
    *
    */
   const handleAddGallery = async () => {
-    if (!name || !galleryImage) return;
-    addGalleryMutate();
+    if (handleInputHasError()) return;
+    addGalleryMutate({
+      name,
+      galleryImageFile: galleryImage,
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "3",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   const handleFileSelected = (event: ChangeEvent<HTMLInputElement>) => {
@@ -90,6 +103,23 @@ export const AddGalleryImage: FC = () => {
       setGalleryViewImage(imageReader.result as string);
     };
     setRawGalleryImage(selectedImage);
+  };
+
+  const handleInputHasError = () => {
+    let hasError = false;
+    if (!name) {
+      setNameError("Image name is required");
+      hasError = true;
+    }
+
+    if (!galleryImage) {
+      setGalleryImageError("Image is required");
+      hasError = true;
+    } else {
+      setGalleryImageError("");
+    }
+
+    return hasError;
   };
 
   /**
@@ -143,6 +173,8 @@ export const AddGalleryImage: FC = () => {
               setText={setName}
               textValue={name}
               disabled={addGalleryLoading}
+              errorMessage={nameError}
+              resetErrorMessage={setNameError}
             />
           </Grid>
           <Grid className={classes.padTop10} item>
@@ -171,6 +203,12 @@ export const AddGalleryImage: FC = () => {
               circularCrop={false}
             />
           </Grid>
+
+          {galleryImageError && (
+            <Grid className={classes.imgError} item>
+              {galleryImageError}
+            </Grid>
+          )}
         </Grid>
       </Grid>
     </Grid>

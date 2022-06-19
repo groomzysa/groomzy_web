@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { styled, Theme, CSSObject } from "@mui/material/styles";
@@ -32,6 +32,7 @@ import {
   CONTACTS,
   EDIT_PROFILE,
   HOME,
+  PRIVACY_POLICY,
   SIGN_IN,
   SIGN_OUT,
   SIGN_UP,
@@ -41,13 +42,13 @@ import { useFetchClient, useFetchProvider } from "api/hooks/queries";
 import { getToken, getUserIdAndRole, setToken } from "utils/auth";
 import { useApp } from "store";
 import { Role } from "store/types";
-import { Client, Provider } from "api/generated/graphqlTypes";
+import { Client, Provider } from "api/generated/schema";
 
 import { DrawerHeader, DrawerItem } from "./componets";
 import { DRAWER_WIDTH } from "./constants";
 import { IAppBarProps } from "./types";
 
-export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
+export const AppDrawer: FC = () => {
   const [open, setOpen] = useState(false);
   const [pagename, setPageName] = useState<string>("Home");
   const { pathname } = useLocation();
@@ -116,6 +117,9 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
         break;
       case TS_AND_CS.toLowerCase():
         setPageName(TS_AND_CS);
+        break;
+      case PRIVACY_POLICY.toLowerCase():
+        setPageName(PRIVACY_POLICY);
         break;
       default:
         setPageName(HOME);
@@ -311,9 +315,6 @@ export const AppDrawer: FC<{ children: ReactNode }> = ({ children }) => {
           </Grid>
         </ClickAwayListener>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Box marginTop={7}>{children}</Box>
-      </Box>
     </Box>
   );
 };

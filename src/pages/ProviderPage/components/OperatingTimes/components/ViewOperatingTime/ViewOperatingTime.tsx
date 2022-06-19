@@ -1,9 +1,13 @@
 import React, { FC } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, Divider, Grid, Typography } from "@mui/material";
 
 import { useFetchOperatingTime } from "api/hooks/queries";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GDialogBox } from "components";
 
@@ -11,6 +15,7 @@ import { useStyles } from "./styles";
 
 export const ViewOperatingTime: FC = () => {
   const { id, operatingTimeId } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const classes = useStyles();
 
@@ -29,9 +34,17 @@ export const ViewOperatingTime: FC = () => {
    * Handlers
    *
    */
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "1",
+    }).toString();
+  };
+
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**
@@ -64,16 +77,16 @@ export const ViewOperatingTime: FC = () => {
           <Alert severity="error">{fetchServiceErrorMessage}</Alert>
         </Grid>
       ) : null}
-      {content("Day", operatingTime?.day.day || "")}
+      {content("Day", operatingTime?.day?.day || "")}
       {content(
         "Start time",
-        operatingTime?.time.startTime
+        operatingTime?.time?.startTime
           ? operatingTime?.time.startTime + " hrz"
           : ""
       )}
       {content(
         "End time",
-        operatingTime?.time.endTime ? operatingTime?.time.endTime + " hrz" : ""
+        operatingTime?.time?.endTime ? operatingTime?.time.endTime + " hrz" : ""
       )}
     </Grid>
   );

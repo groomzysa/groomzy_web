@@ -21,9 +21,9 @@ export const useGridSettings = ({
 
     rows.push({
       id,
-      day: day.day,
-      starttime: time.startTime,
-      endtime: time.endTime,
+      day: day?.day,
+      starttime: time?.startTime,
+      endtime: time?.endTime,
     });
   });
 

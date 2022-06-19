@@ -1,5 +1,10 @@
 import React, { FC, useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+  createSearchParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, DialogActions, Grid, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 import TimePicker, { TimePickerValue } from "react-time-picker";
@@ -7,7 +12,6 @@ import TimePicker, { TimePickerValue } from "react-time-picker";
 import { useDeleteOperatingTime } from "api/hooks/mutations";
 import { useFetchOperatingTime } from "api/hooks/queries";
 import { BUSINESS_DAYS } from "utils/constants";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GButton, GDialogBox, GSelect } from "components";
 
@@ -15,6 +19,7 @@ import { useStyles } from "./styles";
 
 export const DeleteOperatingTime: FC = () => {
   const { id, operatingTimeId } = useParams();
+  const [searchParams] = useSearchParams();
   const [
     deleteOperatingTimeSuccessMessage,
     setDeleteOperatingTimeSuccessMessage,
@@ -36,11 +41,7 @@ export const DeleteOperatingTime: FC = () => {
     deleteOperatingTimeLoading,
     deleteOperatingTimeErrorMessage,
     deleteOperatingTimeHasError,
-  } = useDeleteOperatingTime({
-    variables: {
-      dayTimeId: Number(operatingTimeId),
-    },
-  });
+  } = useDeleteOperatingTime();
 
   /**
    *
@@ -73,12 +74,22 @@ export const DeleteOperatingTime: FC = () => {
    *
    */
   const handleDeleteOperatingTime = async () => {
-    deleteOperatingTimeMutate();
+    deleteOperatingTimeMutate({
+      dayTimeId: Number(operatingTimeId),
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "1",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

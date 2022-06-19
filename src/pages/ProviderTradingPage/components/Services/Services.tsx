@@ -4,7 +4,7 @@ import { Box, Grid } from "@mui/material";
 import { isEmpty } from "lodash";
 
 import { useFetchProviderServices } from "api/hooks/queries";
-import { Category } from "api/generated/graphqlTypes";
+import { Category } from "api/generated/schema";
 
 import { GCenterMessage, GLoadingSpinner } from "components";
 

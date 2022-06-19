@@ -1,22 +1,14 @@
-import { useQuery } from "react-query";
-import { GraphQLResponse } from "graphql-request/dist/types";
-
-import { OPERATING_TIME_QUERY } from "api/graphql/queries";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { DayTime } from "api/generated/graphqlTypes";
+import { useOperatingTimeQuery } from "api/generated/schema";
 
 import { IUseFetchOperatingTime } from "./types";
 
 export const useFetchOperatingTime = ({
   variables,
 }: IUseFetchOperatingTime) => {
-  const fetchOperatingTime = async () => {
-    return graphqlRequestClient().request(OPERATING_TIME_QUERY, variables);
-  };
-
-  const { data, isLoading, error } = useQuery<GraphQLResponse, Error, DayTime>(
-    "operatingTime",
-    fetchOperatingTime,
+  const { data, isLoading, error } = useOperatingTimeQuery(
+    graphqlRequestClient(),
+    variables,
     { enabled: !!variables?.id, select: (data) => data?.operatingTime }
   );
 

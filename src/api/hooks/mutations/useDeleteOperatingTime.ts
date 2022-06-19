@@ -1,22 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { DELETE_OPERATING_TIME_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { DayTime, Message } from "api/generated/graphqlTypes";
+import { useDeleteOperatingTimeMutation } from "api/generated/schema";
 
-import { IUseDeleteOperatingTime } from "./types";
-
-export const useDeleteOperatingTime = ({
-  variables,
-}: IUseDeleteOperatingTime) => {
+export const useDeleteOperatingTime = () => {
   const queryClient = useQueryClient();
-
-  const deleteOperatingTime = async () => {
-    return graphqlRequestClient().request(
-      DELETE_OPERATING_TIME_MUTATION,
-      variables
-    );
-  };
 
   const {
     mutate: deleteOperatingTimeMutate,
@@ -24,22 +12,9 @@ export const useDeleteOperatingTime = ({
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    deleteOperatingTime: { message: Message; operatingTime: DayTime };
-  }>("deleteOperatingTime", deleteOperatingTime, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        "providerOperatingTimes",
-        ({ providerOperatingTimes }) => {
-          const newProviderOperatingTimes = providerOperatingTimes.filter(
-            (providerOperatingTime: DayTime) =>
-              providerOperatingTime.id !==
-              data.deleteOperatingTime.operatingTime.id
-          );
-          return { providerOperatingTimes: newProviderOperatingTimes };
-        }
-      );
-    },
+  } = useDeleteOperatingTimeMutation(graphqlRequestClient(), {
+    onSuccess: () =>
+      queryClient.invalidateQueries("providerOperatingTimesQuery"),
   });
 
   //@ts-ignore

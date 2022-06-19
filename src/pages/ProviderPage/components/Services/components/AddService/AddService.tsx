@@ -1,11 +1,15 @@
 import React, { FC, useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, DialogActions, Grid, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 
 import { useAddService } from "api/hooks/mutations";
 import { CATEGORIES, DURATION_UNITS } from "utils/constants";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GButton, GDialogBox, GSelect, GTextField } from "components";
 import { ISelectOption } from "store/types";
@@ -14,12 +18,19 @@ import { useStyles } from "./styles";
 
 export const AddService: FC = () => {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const [title, setTitle] = useState<string>("");
+  const [titleError, setTitleError] = useState<string>("");
   const [price, setPrice] = useState<string>();
+  const [priceError, setPriceError] = useState<string>();
   const [description, setDescription] = useState<string>("");
+  const [descriptionError, setDescriptionError] = useState<string>("");
   const [duration, setDuration] = useState<string>();
+  const [durationError, setDurationError] = useState<string>();
   const [durationUnit, setDurationUnit] = useState<ISelectOption>();
+  const [durationUnitError, setDurationUnitError] = useState<string>("");
   const [category, setCategory] = useState<ISelectOption>();
+  const [categoryError, setCategoryError] = useState<string>("");
   const [addServiceSuccessMessage, setAddServiceSuccessMessage] =
     useState<string>();
   const navigate = useNavigate();
@@ -36,17 +47,7 @@ export const AddService: FC = () => {
     addServiceLoading,
     addServiceErrorMessage,
     addServiceHasError,
-  } = useAddService({
-    variables: {
-      category: category?.value || "",
-      title,
-      description,
-      price: Number(price),
-      duration: Number(duration),
-      durationUnit: durationUnit?.value || "",
-      inHouse: false,
-    },
-  });
+  } = useAddService();
 
   /**
    *
@@ -77,21 +78,63 @@ export const AddService: FC = () => {
    *
    */
   const handleAddService = async () => {
-    if (
-      !title ||
-      !category ||
-      !description ||
-      !price ||
-      !duration ||
-      !durationUnit
-    )
-      return;
-    addServiceMutate();
+    if (handleInputHasError()) return;
+    addServiceMutate({
+      category: category?.value || "",
+      title,
+      description,
+      price: Number(price),
+      duration: Number(duration),
+      durationUnit: durationUnit?.value || "",
+      inHouse: false,
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "0",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
+  };
+
+  const handleInputHasError = () => {
+    let hasError = false;
+    if (!category) {
+      setCategoryError("category is required");
+      hasError = true;
+    }
+    if (!title) {
+      setTitleError("Title is required");
+      hasError = true;
+    }
+
+    if (!description) {
+      setDescriptionError("Description is required");
+      hasError = true;
+    }
+
+    if (!price) {
+      setPriceError("Price is required");
+      hasError = true;
+    }
+
+    if (!duration) {
+      setDurationError("Duration is required");
+      hasError = true;
+    }
+
+    if (!durationUnit) {
+      setDurationUnitError("Duration unit is required");
+      hasError = true;
+    }
+
+    return hasError;
   };
 
   /**
@@ -119,6 +162,8 @@ export const AddService: FC = () => {
           setSelect={setCategory}
           value={category}
           disabled={addServiceLoading}
+          errorMessage={categoryError}
+          resetErrorMessage={setCategoryError}
         />
       </Grid>
       <Grid className={classes.padTop10} item>
@@ -128,6 +173,8 @@ export const AddService: FC = () => {
           textValue={title}
           setText={setTitle}
           disabled={addServiceLoading}
+          errorMessage={titleError}
+          resetErrorMessage={setTitleError}
         />
       </Grid>
       <Grid className={classes.padTop10} item>
@@ -139,6 +186,8 @@ export const AddService: FC = () => {
           multiline
           rows={3}
           disabled={addServiceLoading}
+          errorMessage={descriptionError}
+          resetErrorMessage={setDescriptionError}
         />
       </Grid>
       <Grid className={classes.padTop10} item>
@@ -148,6 +197,8 @@ export const AddService: FC = () => {
           textValue={price}
           setText={setPrice}
           disabled={addServiceLoading}
+          errorMessage={priceError}
+          resetErrorMessage={setPriceError}
         />
       </Grid>
       <Grid className={classes.padTop10} item>
@@ -159,6 +210,8 @@ export const AddService: FC = () => {
               textValue={duration}
               setText={setDuration}
               disabled={addServiceLoading}
+              errorMessage={durationError}
+              resetErrorMessage={setDurationError}
             />
           </Grid>
           <Grid item xs>
@@ -169,6 +222,8 @@ export const AddService: FC = () => {
               setSelect={setDurationUnit}
               value={durationUnit}
               disabled={addServiceLoading}
+              errorMessage={durationUnitError}
+              resetErrorMessage={setDurationUnitError}
             />
           </Grid>
         </Grid>

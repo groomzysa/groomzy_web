@@ -1,15 +1,20 @@
 import React, { FC } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+  createSearchParams,
+} from "react-router-dom";
 import { Alert, Divider, Grid, Typography } from "@mui/material";
 
 import { useFetchStaff } from "api/hooks/queries";
-import { setLocalStorage } from "utils/localStorage";
 import { GDialogBox } from "components";
 
 import { useStyles } from "./styles";
 
 export const ViewStaff: FC = () => {
   const { id, staffId } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const classes = useStyles();
 
@@ -27,9 +32,17 @@ export const ViewStaff: FC = () => {
    * Handlers
    *
    */
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "2",
+    }).toString();
+  };
+
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

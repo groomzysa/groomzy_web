@@ -54,15 +54,20 @@ export const PoviderDetails: FC = () => {
           {providerOperatingTimes.map((dayTime) => {
             const { day, time } = dayTime;
             return (
-              <Grid key={day.day} container justifyContent="space-evenly">
-                <Grid item>{day.day}</Grid>
+              <Grid
+                className={classes.dayTimes}
+                key={day?.day}
+                container
+                justifyContent="space-evenly"
+              >
+                <Grid item>{day?.day}</Grid>
                 <Grid item>
                   <Grid container>
-                    <Grid item>{`${time.startTime} hrz`}</Grid>
+                    <Grid item>{`${time?.startTime} hrz`}</Grid>
                     <Grid className={classes.timeSeperator} item>
                       -
                     </Grid>
-                    <Grid item>{`${time.endTime} hrz`}</Grid>
+                    <Grid item>{`${time?.endTime} hrz`}</Grid>
                   </Grid>
                 </Grid>
               </Grid>

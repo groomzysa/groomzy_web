@@ -1,17 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { ADD_SERVICE_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Message, Service } from "api/generated/graphqlTypes";
+import { useAddServiceMutation } from "api/generated/schema";
 
-import { IUseAddService } from "./types";
-
-export const useAddService = ({ variables }: IUseAddService) => {
+export const useAddService = () => {
   const queryClient = useQueryClient();
-
-  const addService = async () => {
-    return graphqlRequestClient().request(ADD_SERVICE_MUTATION, variables);
-  };
 
   const {
     mutate: addServiceMutate,
@@ -19,18 +12,8 @@ export const useAddService = ({ variables }: IUseAddService) => {
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    addService: { message: Message; service: Service };
-  }>("addService", addService, {
-    onSuccess: (data) => {
-      queryClient.setQueryData("providerServices", ({ providerServices }) => {
-        const newProviderServices = [
-          data.addService.service,
-          ...providerServices,
-        ];
-        return { providerServices: newProviderServices };
-      });
-    },
+  } = useAddServiceMutation(graphqlRequestClient(), {
+    onSuccess: () => queryClient.invalidateQueries("providerServicesQuery"),
   });
 
   //@ts-ignore

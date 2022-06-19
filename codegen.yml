@@ -1,5 +1,24 @@
-schema: http://localhost:4000
+overwrite: true
+schema: ${REACT_APP_API_URL}
+documents: "src/api/graphql/**/*.{graphql,gql}"
 generates:
-  ./src/api/generated/graphqlTypes.ts:
+  src/api/generated/schema.ts:
     plugins:
+      - add:
+          content: "/************************************\n * GENERATED TYPES FILE DO NOT EDIT *\n************************************/\n"
       - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      fetcher: graphql-request
+      documentVariableSuffix: Gql
+      hooksSuffix:
+      omitOperationSuffix: true
+      operationResultSuffix: Result
+      pureMagicComment: true
+      skipTypename: false
+      useImplementingTypes: true
+      useTypeImports: true
+      withMutationFn: true
+      namingConvention:
+        enumValues: change-case-all#upperCase

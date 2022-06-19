@@ -1,9 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useSearchParams,
+  createSearchParams,
+} from "react-router-dom";
 import { Alert, DialogActions, Grid, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 
-import { setLocalStorage } from "utils/localStorage";
 import { useDeleteSocial } from "api/hooks/mutations";
 import { useFetchSocial } from "api/hooks/queries";
 
@@ -13,6 +17,7 @@ import { useStyles } from "./styles";
 
 export const DeleteSocial: FC = () => {
   const { id, socialId } = useParams();
+  const [searchParams] = useSearchParams();
   const [deleteSocialSuccessMessage, setDeleteSocialSuccessMessage] =
     useState<string>();
   const navigate = useNavigate();
@@ -33,11 +38,7 @@ export const DeleteSocial: FC = () => {
     deleteSocialLoading,
     deleteSocialErrorMessage,
     deleteSocialHasError,
-  } = useDeleteSocial({
-    variables: {
-      socialId: Number(socialId),
-    },
-  });
+  } = useDeleteSocial();
 
   /**
    *
@@ -70,12 +71,22 @@ export const DeleteSocial: FC = () => {
    *
    */
   const handleDeleteSocial = async () => {
-    deleteSocialMutate();
+    deleteSocialMutate({
+      socialId: Number(socialId),
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "3",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

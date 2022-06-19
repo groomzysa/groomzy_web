@@ -5,9 +5,13 @@ import {
   ABOUT,
   CONTACTS,
   EDIT_PROFILE,
+  PRIVACY_POLICY,
   PROVIDER_TRADING,
+  REQUEST_RESET_PASSWORD,
+  RESET_PASSWORD,
   SIGN_IN,
   SIGN_UP,
+  TS_AND_CS,
 } from "utils/constants";
 import { getUserIdAndRole } from "utils/auth";
 
@@ -21,6 +25,10 @@ import {
   ProviderTradingPage,
   ProviderPage,
   NotFoundPage,
+  RequestResetPassword,
+  ResetPassword,
+  PrivacyPolicyPage,
+  TermsAndConditions,
 } from "pages";
 import { Role } from "store/types";
 
@@ -68,6 +76,26 @@ export const AppRoutes: FC = () => {
       <Route
         path={encodeURI(`${PROVIDER_TRADING.toLowerCase()}/:id/*`)}
         element={<ProviderTradingPage />}
+      />
+
+      <Route
+        path={encodeURI(REQUEST_RESET_PASSWORD.toLowerCase())}
+        element={<RequestResetPassword />}
+      />
+
+      <Route
+        path={encodeURI(RESET_PASSWORD.toLowerCase())}
+        element={<ResetPassword />}
+      />
+
+      <Route
+        path={encodeURI(PRIVACY_POLICY.toLowerCase())}
+        element={<PrivacyPolicyPage />}
+      />
+
+      <Route
+        path={encodeURI(TS_AND_CS.toLowerCase())}
+        element={<TermsAndConditions />}
       />
 
       <Route path="*" element={<NotFoundPage />} />

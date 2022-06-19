@@ -1,12 +1,16 @@
 import React, { FC, useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, DialogActions, Grid, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 import TimePicker, { TimePickerValue } from "react-time-picker";
 
 import { useAddOperatingTime } from "api/hooks/mutations";
 import { BUSINESS_DAYS } from "utils/constants";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GButton, GDialogBox, GSelect } from "components";
 import { ISelectOption } from "store/types";
@@ -15,6 +19,7 @@ import { useStyles } from "./styles";
 
 export const AddOperatingTime: FC = () => {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const [day, setDay] = useState<ISelectOption>();
   const [startTime, setStartTime] = useState<TimePickerValue>("08:00");
   const [endTime, setEndTime] = useState<TimePickerValue>("17:00");
@@ -34,13 +39,7 @@ export const AddOperatingTime: FC = () => {
     addOperatingTimeLoading,
     addOperatingTimeErrorMessage,
     addOperatingTimeHasError,
-  } = useAddOperatingTime({
-    variables: {
-      day: day?.value || "",
-      startTime: startTime as string,
-      endTime: endTime as string,
-    },
-  });
+  } = useAddOperatingTime();
 
   /**
    *
@@ -74,12 +73,24 @@ export const AddOperatingTime: FC = () => {
    */
   const handleAddOperatingTime = async () => {
     if (!day || !startTime || !endTime) return;
-    addOperatingTimeMutate();
+    addOperatingTimeMutate({
+      day: day?.value || "",
+      startTime: startTime as string,
+      endTime: endTime as string,
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "1",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

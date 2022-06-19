@@ -4,14 +4,14 @@ import { blueGrey } from "@mui/material/colors";
 export const useStyles = makeStyles(() => {
   return {
     mapWrapper: {
-      height: 250,
+      height: 350,
       width: "100%",
     },
     operatingTitle: {
       paddingTop: 10,
       paddingBottom: 10,
       color: blueGrey[500],
-      fontSize: 20,
+      fontSize: 26,
       fontWeight: "bold",
       display: "flex",
       justifyContent: "center",
@@ -19,6 +19,10 @@ export const useStyles = makeStyles(() => {
     timeSeperator: {
       paddingRight: 10,
       paddingLeft: 10,
+    },
+    dayTimes: {
+      fontWeight: "bold",
+      fontSize: 18,
     },
   };
 });

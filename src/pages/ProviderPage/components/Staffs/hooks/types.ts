@@ -1,4 +1,4 @@
-import { Staff } from "api/generated/graphqlTypes";
+import { Staff } from "api/generated/schema";
 
 type classesRecord = Record<
   "padRight10" | "viewButton" | "editButton" | "deleteButton" | "headerName",

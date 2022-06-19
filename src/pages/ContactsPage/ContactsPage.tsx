@@ -27,14 +27,7 @@ export const ContactsPage: FC = () => {
     sendMailLoading,
     sendMailErrorMessage,
     sendMailhasError,
-  } = useSendMail({
-    variables: {
-      fullName,
-      email,
-      message,
-      subject,
-    },
-  });
+  } = useSendMail();
 
   /**
    *
@@ -73,7 +66,12 @@ export const ContactsPage: FC = () => {
   };
 
   const handleSendEmail = () => {
-    sendMailMutation();
+    sendMailMutation({
+      fullName,
+      email,
+      message,
+      subject,
+    });
   };
 
   return (

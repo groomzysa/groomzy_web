@@ -1,17 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { ADD_SOCIAL_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Message, Staff } from "api/generated/graphqlTypes";
+import { useAddSocialMutation } from "api/generated/schema";
 
-import { IUseAddSocial } from "./types";
-
-export const useAddSocial = ({ variables }: IUseAddSocial) => {
+export const useAddSocial = () => {
   const queryClient = useQueryClient();
-
-  const addSocial = async () => {
-    return graphqlRequestClient().request(ADD_SOCIAL_MUTATION, variables);
-  };
 
   const {
     mutate: addSocialMutate,
@@ -19,15 +12,8 @@ export const useAddSocial = ({ variables }: IUseAddSocial) => {
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    addSocial: { message: Message; social: Staff };
-  }>("addSocial", addSocial, {
-    onSuccess: (data) => {
-      queryClient.setQueryData("providerSocials", ({ providerSocials }) => {
-        const newProviderSocials = [data.addSocial.social, ...providerSocials];
-        return { providerSocials: newProviderSocials };
-      });
-    },
+  } = useAddSocialMutation(graphqlRequestClient(), {
+    onSuccess: () => queryClient.invalidateQueries("providerSocialsQuery"),
   });
 
   //@ts-ignore
