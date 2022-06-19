@@ -1,12 +1,19 @@
 import React, { FC } from "react";
-import { Route, Routes, useParams, useNavigate } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  useParams,
+  useNavigate,
+  createSearchParams,
+  useSearchParams,
+} from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Grid } from "@mui/material";
 import { AddOutlined } from "@mui/icons-material";
 import { isEmpty } from "lodash";
 
 import { useFetchProviderStaffs } from "api/hooks/queries";
-import { GButton, GCenterMessage } from "components";
+import { GButton, GCenterMessage, GLoadingSpinner } from "components";
 
 import { EditStaff, ViewStaff, AddStaff, DeleteStaff } from "./components";
 import { useGridSettings } from "./hooks/useGridSettings";
@@ -14,6 +21,7 @@ import { useStyles } from "./styles";
 
 export const Staffs: FC = () => {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const classes = useStyles();
 
@@ -22,7 +30,7 @@ export const Staffs: FC = () => {
    * Custom hooks
    *
    */
-  const { providerStaffs } = useFetchProviderStaffs({
+  const { providerStaffs, isLoading } = useFetchProviderStaffs({
     variables: { providerId: parseInt(id || "") },
   });
 
@@ -30,6 +38,21 @@ export const Staffs: FC = () => {
     classes,
     providerStaffs: providerStaffs || [],
   });
+
+  /**
+   *
+   * Handlers
+   *
+   */
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "2",
+    }).toString();
+  };
+
+  if (isLoading) {
+    return <GLoadingSpinner />;
+  }
 
   return (
     <Grid container direction="column">
@@ -39,7 +62,12 @@ export const Staffs: FC = () => {
           startIcon={<AddOutlined />}
           className={classes.addButton}
           variant="outlined"
-          onClick={() => navigate(encodeURI(`add_staff`))}
+          onClick={() =>
+            navigate({
+              pathname: encodeURI(`add_staff`),
+              search: handleCreateTabIndexSearchParam(),
+            })
+          }
         />
       </Grid>
       <Grid className={classes.padTop10} item>

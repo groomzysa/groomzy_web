@@ -1,5 +1,5 @@
 import { Category, Duration, ISelectOption } from "store/types";
-import { BusinessDay } from "api/generated/graphqlTypes";
+import { BusinessDay } from "api/generated/schema";
 
 /**
  *
@@ -13,8 +13,11 @@ export const SIGN_IN = "Sign in";
 export const SIGN_UP = "Sign up";
 export const SIGN_OUT = "Sign out";
 export const EDIT_PROFILE = "Edit profile";
-export const TS_AND_CS = "Ts & Cs";
+export const TS_AND_CS = "Terms and conditions";
 export const PROVIDER_TRADING = "Provider trading";
+export const REQUEST_RESET_PASSWORD = "Request reset password";
+export const RESET_PASSWORD = "Reset password";
+export const PRIVACY_POLICY = "Privacy policy";
 
 /**
  *
@@ -41,6 +44,7 @@ export const PROVINCES: ISelectOption[] = [
  */
 
 export const CATEGORIES: ISelectOption[] = [
+  { id: 0, value: "None", label: "None" },
   { id: 1, value: Category.Barber, label: Category.Barber },
   { id: 2, value: Category.Hairdresser, label: Category.Hairdresser },
   { id: 3, value: Category.MakeupArtist, label: Category.MakeupArtist },
@@ -66,13 +70,13 @@ export const DURATION_UNITS: ISelectOption[] = [
  */
 
 export const BUSINESS_DAYS: ISelectOption[] = [
-  { id: 1, value: BusinessDay.Mon, label: BusinessDay.Mon },
-  { id: 2, value: BusinessDay.Tue, label: BusinessDay.Tue },
-  { id: 3, value: BusinessDay.Wed, label: BusinessDay.Wed },
-  { id: 4, value: BusinessDay.Thu, label: BusinessDay.Thu },
-  { id: 5, value: BusinessDay.Fri, label: BusinessDay.Fri },
-  { id: 6, value: BusinessDay.Sat, label: BusinessDay.Sat },
-  { id: 7, value: BusinessDay.Sun, label: BusinessDay.Sun },
+  { id: 1, value: BusinessDay.MON, label: BusinessDay.MON },
+  { id: 2, value: BusinessDay.THU, label: BusinessDay.TUE },
+  { id: 3, value: BusinessDay.WED, label: BusinessDay.WED },
+  { id: 4, value: BusinessDay.THU, label: BusinessDay.THU },
+  { id: 5, value: BusinessDay.FRI, label: BusinessDay.FRI },
+  { id: 6, value: BusinessDay.SAT, label: BusinessDay.SAT },
+  { id: 7, value: BusinessDay.SUN, label: BusinessDay.SUN },
 ];
 
 /**

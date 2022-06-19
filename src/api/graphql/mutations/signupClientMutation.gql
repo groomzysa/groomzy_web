@@ -1,0 +1,15 @@
+mutation signupClientMutation(
+  $fullName: String!
+  $email: String!
+  $password: String!
+  $phoneNumber: String!
+) {
+  signupClient(
+    fullName: $fullName
+    email: $email
+    password: $password
+    phoneNumber: $phoneNumber
+  ) {
+    message
+  }
+}

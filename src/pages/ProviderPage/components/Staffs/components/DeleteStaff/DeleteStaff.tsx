@@ -1,11 +1,15 @@
 import React, { FC, useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, DialogActions, Grid, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 
 import { useFetchStaff } from "api/hooks/queries";
 import { useDeleteStaff } from "api/hooks/mutations";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GButton, GDialogBox, GTextField } from "components";
 
@@ -13,6 +17,7 @@ import { useStyles } from "./styles";
 
 export const DeleteStaff: FC = () => {
   const { id, staffId } = useParams();
+  const [searchParams] = useSearchParams();
   const [deleteStaffSuccessMessage, setDeleteStaffSuccessMessage] =
     useState<string>();
   const navigate = useNavigate();
@@ -33,11 +38,7 @@ export const DeleteStaff: FC = () => {
     deleteStaffLoading,
     deleteStaffErrorMessage,
     deleteStaffHasError,
-  } = useDeleteStaff({
-    variables: {
-      staffId: Number(staffId),
-    },
-  });
+  } = useDeleteStaff();
 
   /**
    *
@@ -68,12 +69,22 @@ export const DeleteStaff: FC = () => {
    *
    */
   const handleDeleteStaff = async () => {
-    deleteStaffMutate();
+    deleteStaffMutate({
+      staffId: Number(staffId),
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "2",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

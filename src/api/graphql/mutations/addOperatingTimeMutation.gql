@@ -1,0 +1,23 @@
+mutation addOperatingTimeMutation(
+  $day: String!
+  $startTime: String!
+  $endTime: String!
+) {
+  addOperatingTime(day: $day, startTime: $startTime, endTime: $endTime) {
+    message {
+      message
+    }
+    operatingTime {
+      id
+      day {
+        id
+        day
+      }
+      time {
+        id
+        startTime
+        endTime
+      }
+    }
+  }
+}

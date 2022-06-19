@@ -19,3 +19,5 @@ export { useEditSocial } from "./useEditSocial";
 export { useDeleteSocial } from "./useDeleteSocial";
 export { useAddGallery } from "./useAddGallery";
 export { useDeleteGallery } from "./useDeleteGallery";
+export { useRequestResetPassword } from "./useRequestResetPassword";
+export { useResetPassword } from "./useResetPassword";

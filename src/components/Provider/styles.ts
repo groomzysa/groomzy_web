@@ -68,6 +68,7 @@ export const useStyles = makeStyles(() => {
       display: "flex",
       width: "100%",
       overflowX: "auto",
+      paddingTop: 2,
       height: 45,
       paddingLeft: 10,
     },

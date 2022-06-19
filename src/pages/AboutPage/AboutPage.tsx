@@ -29,18 +29,33 @@ export const AboutPage: FC = () => {
           </Grid>
           <Grid item>
             <Typography>
-              Groomzy is a beauty grooming industry booking platform where
-              service providers offer their services and the clients make
-              bookings for these services.
+              Groomzy is a beauty grooming industry{" "}
+              <strong>(future booking)</strong> platform where service providers
+              offer their services and the clients make bookings for these
+              services.
             </Typography>
+            <br />
             <Typography>
-              Both users (clients and service providers) can download the app to
-              find service providers in their location.
+              Currently, Groomzy offers its platform in 2 forms, namely, Web app
+              which accessible through https://www.groomzy.co.za and an Android
+              app where both users (clients and service providers) can download
+              the app to find service providers in their near location or
+              nationwide.
             </Typography>
+            <br />
             <Typography className={classes.padBottom10}>
-              It is an Any time, Anywhere platform that has an in-house booking
-              feature, and makes scheduling and managing bookings much easier.
+              Groomzy is an{" "}
+              <strong>
+                Any time, Anywhere platform that will enable an in-house booking
+                feature, and makes scheduling and managing bookings much easier.
+              </strong>
             </Typography>
+            <br />
+
+            <Typography>
+              <strong>Groomzy aims to:</strong>
+            </Typography>
+
             <Typography
               className={`${classes.padBottom10} ${classes.subHeading}`}
             >
@@ -49,13 +64,34 @@ export const AboutPage: FC = () => {
             <Typography
               className={`${classes.padBottom10} ${classes.subHeading}`}
             >
-              No more engaged phones.
+              No more unneccessary long queues.
             </Typography>
+            <Typography
+              className={`${classes.padBottom10} ${classes.subHeading}`}
+            >
+              No more wasted waiting time.
+            </Typography>
+            <Typography
+              className={`${classes.padBottom10} ${classes.subHeading}`}
+            >
+              Quick servicing of clients.
+            </Typography>
+            <Typography
+              className={`${classes.padBottom10} ${classes.subHeading}`}
+            >
+              Easy clients management record.
+            </Typography>
+            <br />
             <Typography className={classes.padBottom10}>
-              To get started, download groomzy application platform, select
-              service type, search for a service provider, choose a service and
-              make a booking within your area. Booking is easy, convenient and
-              instant.
+              To get started, visit Groomzy at https://www.groomzy.co.za or
+              download an android groomzy application here. As a{" "}
+              <strong>client</strong> you may start browsing right-away and can
+              view more details about a service provider by clicking the view
+              button. As a <strong>service provider</strong>, you may start
+              creating your profile right-away and once you have provided all
+              your business details including (trading name, trading address,
+              trading days and hours, and services) then you will appear to the
+              clients search
             </Typography>
           </Grid>
           <Divider className={classes.padBottom10} />
@@ -73,7 +109,8 @@ export const AboutPage: FC = () => {
                   </Grid>
                   <Grid item>
                     <Typography>
-                      We promise to offer easy, convenient and instant booking.
+                      We promise to offer easy to use and convenient grooming
+                      search of service providers.
                     </Typography>
                   </Grid>
                 </Grid>

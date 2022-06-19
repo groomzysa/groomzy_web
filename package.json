@@ -6,7 +6,9 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@googlemaps/react-wrapper": "^1.1.34",
+    "@graphql-codegen/add": "^3.1.1",
     "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/near-operation-file-preset": "^2.2.14",
     "@graphql-codegen/typescript": "^2.4.11",
     "@graphql-codegen/typescript-operations": "^2.4.0",
     "@graphql-codegen/typescript-react-query": "^3.5.12",
@@ -54,7 +56,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "gql:codegen": "graphql-codegen --config codegen.yml"
+    "gql:codegen": "graphql-codegen --require dotenv/config --config codegen.yml"
   },
   "eslintConfig": {
     "extends": [

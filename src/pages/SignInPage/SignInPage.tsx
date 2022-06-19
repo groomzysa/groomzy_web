@@ -4,7 +4,7 @@ import { Alert, Grid } from "@mui/material";
 import { validate } from "email-validator";
 
 import { useSigninClient, useSigninProvider } from "api/hooks/mutations";
-import { SIGN_IN, SIGN_UP } from "utils/constants";
+import { REQUEST_RESET_PASSWORD, SIGN_IN, SIGN_UP } from "utils/constants";
 import { setToken } from "utils/auth";
 import { useApp } from "store";
 
@@ -33,9 +33,7 @@ export const SignInPage: FC = () => {
     signinClientLoading,
     signinClientErrorMessage,
     signinClienthasError,
-  } = useSigninClient({
-    variables: { email, password },
-  });
+  } = useSigninClient();
 
   const {
     signinProviderMutate,
@@ -43,9 +41,7 @@ export const SignInPage: FC = () => {
     signinProviderLoading,
     signinProviderErrorMessage,
     signinProviderHasError,
-  } = useSigninProvider({
-    variables: { email, password },
-  });
+  } = useSigninProvider();
 
   const { setSignedInUser } = useApp();
 
@@ -79,14 +75,20 @@ export const SignInPage: FC = () => {
    */
   const handleSigninClient = () => {
     if (handleInputHasError()) return;
-    signinClientMutate();
+    signinClientMutate({
+      email,
+      password,
+    });
     setSigningIn(true);
   };
 
   const handleSigninProvider = () => {
     if (handleInputHasError()) return;
 
-    signinProviderMutate();
+    signinProviderMutate({
+      email,
+      password,
+    });
     setSigningIn(true);
   };
 
@@ -96,6 +98,10 @@ export const SignInPage: FC = () => {
 
   const handleJoinClick = () => {
     navigate(`/${encodeURI(SIGN_UP.toLowerCase())}`);
+  };
+
+  const handleRequestResetPasswordClick = () => {
+    navigate(`/${encodeURI(REQUEST_RESET_PASSWORD.toLowerCase())}`);
   };
 
   const handleInputHasError = () => {
@@ -142,6 +148,7 @@ export const SignInPage: FC = () => {
               textValue={email}
               disabled={isLoading}
               errorMessage={emailError}
+              resetErrorMessage={setEmailError}
             />
           </Grid>
           <Grid className={classes.padTop10} item xs>
@@ -153,6 +160,7 @@ export const SignInPage: FC = () => {
               textValue={password}
               disabled={isLoading}
               errorMessage={passwordError}
+              resetErrorMessage={setPasswordError}
             />
           </Grid>
           <Grid className={classes.padTop10} item xs>
@@ -168,6 +176,7 @@ export const SignInPage: FC = () => {
               onClick={isProvider ? handleSigninProvider : handleSigninClient}
               className={classes.button}
               loading={isLoading}
+              disabled={isLoading}
             />
           </Grid>
           <Grid item>
@@ -176,6 +185,7 @@ export const SignInPage: FC = () => {
                 <GButton
                   children="Forgot password"
                   className={classes.button}
+                  onClick={handleRequestResetPasswordClick}
                 />
               </Grid>
               <Grid className={classes.padTop10} item>

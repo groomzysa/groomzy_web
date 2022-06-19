@@ -1,0 +1,8 @@
+query providerGalleryQuery($providerId: Int!) {
+  providerGallery(providerId: $providerId) {
+    id
+    fileName
+    name
+    url
+  }
+}

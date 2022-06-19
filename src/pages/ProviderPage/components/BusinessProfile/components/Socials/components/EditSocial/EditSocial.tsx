@@ -1,11 +1,15 @@
 import React, { FC, useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, DialogActions, Grid, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 
 import { useFetchSocial } from "api/hooks/queries";
 import { useEditSocial } from "api/hooks/mutations";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GButton, GDialogBox, GTextField } from "components";
 
@@ -13,6 +17,7 @@ import { useStyles } from "./styles";
 
 export const EditSocial: FC = () => {
   const { id, socialId } = useParams();
+  const [searchParams] = useSearchParams();
   const [name, setName] = useState<string>();
   const [url, setUrl] = useState<string>();
   const [editSocialSuccessMessage, setEditSocialSuccessMessage] =
@@ -35,13 +40,7 @@ export const EditSocial: FC = () => {
     editSocialLoading,
     editSocialErrorMessage,
     editSocialHasError,
-  } = useEditSocial({
-    variables: {
-      socialId: Number(socialId),
-      name,
-      url,
-    },
-  });
+  } = useEditSocial();
 
   /**
    *
@@ -72,12 +71,24 @@ export const EditSocial: FC = () => {
    *
    */
   const handleEditSocial = async () => {
-    editSocialMutate();
+    editSocialMutate({
+      socialId: Number(socialId),
+      name,
+      url,
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "3",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

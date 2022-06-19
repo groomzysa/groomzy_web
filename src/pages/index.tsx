@@ -7,3 +7,7 @@ export { EditProfilePage } from "./EditProfilePage";
 export { ProviderTradingPage } from "./ProviderTradingPage";
 export { ProviderPage } from "./ProviderPage";
 export { NotFoundPage } from "./NotFoundPage";
+export { RequestResetPassword } from "./RequestResetPassword";
+export { ResetPassword } from "./ResetPassword";
+export { PrivacyPolicyPage } from "./PrivacyPolicyPage";
+export { TermsAndConditions } from "./TermsAndConditions";

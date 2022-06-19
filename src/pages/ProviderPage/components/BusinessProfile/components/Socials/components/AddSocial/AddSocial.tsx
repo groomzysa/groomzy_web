@@ -1,10 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  createSearchParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, DialogActions, Grid, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 
 import { useAddSocial } from "api/hooks/mutations";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GButton, GDialogBox, GTextField } from "components";
 
@@ -12,6 +16,7 @@ import { useStyles } from "./styles";
 
 export const AddSocial: FC = () => {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const [name, setName] = useState<string>("");
   const [url, setUrl] = useState<string>("");
   const [addSocialSuccessMessage, setAddSocialSuccessMessage] =
@@ -30,12 +35,7 @@ export const AddSocial: FC = () => {
     addSocialLoading,
     addSocialErrorMessage,
     addSocialHasError,
-  } = useAddSocial({
-    variables: {
-      name,
-      url,
-    },
-  });
+  } = useAddSocial();
 
   /**
    *
@@ -67,12 +67,23 @@ export const AddSocial: FC = () => {
    */
   const handleAddSocial = async () => {
     if (!name || !url) return;
-    addSocialMutate();
+    addSocialMutate({
+      name,
+      url,
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "3",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

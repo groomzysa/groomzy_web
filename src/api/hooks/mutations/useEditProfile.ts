@@ -1,18 +1,13 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { EDIT_PROFILE_MUTATION } from "api/graphql/mutations";
 import { getUserIdAndRole } from "utils/auth";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { IMessage, Role } from "store/types";
+import { Role } from "store/types";
 
-import { IUseEditProfile } from "./types";
+import { useEditProfileMutation } from "api/generated/schema";
 
-export const useEditProfile = ({ variables }: IUseEditProfile) => {
+export const useEditProfile = () => {
   const queryClient = useQueryClient();
-
-  const editProfile = async () => {
-    return graphqlRequestClient().request(EDIT_PROFILE_MUTATION, variables);
-  };
 
   const {
     mutate: editProfileMutate,
@@ -20,16 +15,12 @@ export const useEditProfile = ({ variables }: IUseEditProfile) => {
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    editProfile: IMessage;
-  }>("editProfile", editProfile, {
-    onSuccess: (data) => {
+  } = useEditProfileMutation(graphqlRequestClient(), {
+    onSuccess: () => {
       const user = getUserIdAndRole();
       const isProvider = user.role === Role.Provider;
-      //@ts-ignore
-      queryClient.setQueryData(
-        [isProvider ? "provider" : "client", { id: user.id }],
-        data
+      queryClient.invalidateQueries(
+        isProvider ? "providerQuery" : "clientQuery"
       );
     },
   });
@@ -39,7 +30,7 @@ export const useEditProfile = ({ variables }: IUseEditProfile) => {
 
   return {
     editProfileMutate,
-    message: data?.editProfile?.message,
+    message: data?.editProfile?.message?.message,
     editProfileLoading: isLoading,
     editProfileErrorMessage: errorMessage,
     editProfileHasError: isError,

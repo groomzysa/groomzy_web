@@ -22,6 +22,8 @@ export const GTextField: FC<IGTextFieldProps> = ({
   startIcon,
   placeholder,
   errorMessage = "",
+  resetErrorMessage = () => {},
+  autoFocus = false,
 }) => {
   const classes = useStyles();
 
@@ -33,8 +35,14 @@ export const GTextField: FC<IGTextFieldProps> = ({
   const handleTextChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    setText(e?.currentTarget?.value || e.target.value);
+    const value = e?.currentTarget?.value || e.target.value;
+    setText(value);
+
+    if (errorMessage && value) {
+      resetErrorMessage("");
+    }
   };
+
   return (
     <TextField
       className={`${classes.textField} ${className}`}
@@ -57,6 +65,7 @@ export const GTextField: FC<IGTextFieldProps> = ({
       placeholder={placeholder}
       error={!isEmpty(errorMessage)}
       helperText={errorMessage}
+      autoFocus={autoFocus}
     >
       {children}
     </TextField>

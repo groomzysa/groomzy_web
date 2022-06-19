@@ -1,0 +1,12 @@
+mutation deleteSocialMutation($socialId: Int!) {
+  deleteSocial(socialId: $socialId) {
+    message {
+      message
+    }
+    social {
+      id
+      name
+      url
+    }
+  }
+}

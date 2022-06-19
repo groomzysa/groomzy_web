@@ -1,4 +1,4 @@
-import { Provider, QueryProvidersArgs } from "api/generated/graphqlTypes";
+import { Provider, QueryProvidersArgs } from "api/generated/schema";
 import { Dispatch } from "react";
 import { IAction, IUser } from "store/types";
 import {

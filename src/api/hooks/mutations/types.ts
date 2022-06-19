@@ -20,7 +20,7 @@ import {
   MutationSigninProviderArgs,
   MutationSignupClientArgs,
   MutationSignupProviderArgs,
-} from "api/generated/graphqlTypes";
+} from "api/generated/schema";
 
 export interface IUseSigninClient {
   variables: MutationSigninClientArgs;

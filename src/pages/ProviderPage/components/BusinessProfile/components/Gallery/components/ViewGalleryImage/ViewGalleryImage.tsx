@@ -1,9 +1,13 @@
 import React, { FC } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+  createSearchParams,
+} from "react-router-dom";
 import { Alert, Grid, Typography } from "@mui/material";
 
 import { useFetchGallery } from "api/hooks/queries";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GDialogBox, GTextField } from "components";
 
@@ -11,6 +15,7 @@ import { useStyles } from "./styles";
 
 export const ViewGalleryImage: FC = () => {
   const { id, galleryId } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const classes = useStyles();
@@ -29,9 +34,17 @@ export const ViewGalleryImage: FC = () => {
    * Handlers
    *
    */
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "3",
+    }).toString();
+  };
+
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

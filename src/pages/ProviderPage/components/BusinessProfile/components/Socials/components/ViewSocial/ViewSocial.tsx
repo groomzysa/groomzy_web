@@ -1,9 +1,13 @@
 import React, { FC } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, Divider, Grid, Typography } from "@mui/material";
 
 import { useFetchSocial } from "api/hooks/queries";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GDialogBox } from "components";
 
@@ -11,6 +15,7 @@ import { useStyles } from "./styles";
 
 export const ViewSocial: FC = () => {
   const { id, socialId } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const classes = useStyles();
 
@@ -28,9 +33,17 @@ export const ViewSocial: FC = () => {
    * Handlers
    *
    */
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "3",
+    }).toString();
+  };
+
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

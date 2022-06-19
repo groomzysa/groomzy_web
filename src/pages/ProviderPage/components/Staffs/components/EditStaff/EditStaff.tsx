@@ -1,11 +1,15 @@
 import React, { FC, useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+  createSearchParams,
+} from "react-router-dom";
 import { Alert, DialogActions, Grid, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 
 import { useFetchStaff } from "api/hooks/queries";
 import { useEditStaff } from "api/hooks/mutations";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GButton, GDialogBox, GTextField } from "components";
 
@@ -13,6 +17,7 @@ import { useStyles } from "./styles";
 
 export const EditStaff: FC = () => {
   const { id, staffId } = useParams();
+  const [searchParams] = useSearchParams();
   const [fullName, setFullName] = useState<string>();
   const [editStaffSuccessMessage, setEditStaffSuccessMessage] =
     useState<string>();
@@ -34,12 +39,7 @@ export const EditStaff: FC = () => {
     editStaffLoading,
     editStaffErrorMessage,
     editStaffHasError,
-  } = useEditStaff({
-    variables: {
-      staffId: Number(staffId),
-      fullName,
-    },
-  });
+  } = useEditStaff();
 
   /**
    *
@@ -70,12 +70,23 @@ export const EditStaff: FC = () => {
    *
    */
   const handleEditStaff = async () => {
-    editStaffMutate();
+    editStaffMutate({
+      staffId: Number(staffId),
+      fullName,
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "2",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

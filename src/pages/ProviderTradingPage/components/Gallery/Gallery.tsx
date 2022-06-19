@@ -25,11 +25,12 @@ export const Gallery: FC = () => {
   if (isEmpty(providerGallery || [])) {
     return <GCenterMessage message="Provider gallery not yet available." />;
   }
+
   return (
-    <Grid container>
+    <Grid container spacing={1}>
       {providerGallery?.map((image) => (
-        <Grid key={image.id} item xs={12} sm={6} md={4} lg={3}>
-          <img src={image.url} width={"100%"} alt={image.name} />
+        <Grid key={image?.id} item xs={12} sm={6} md={4} lg={3}>
+          <img src={image?.url || ""} width={"100%"} alt={image?.name || ""} />
         </Grid>
       ))}
     </Grid>

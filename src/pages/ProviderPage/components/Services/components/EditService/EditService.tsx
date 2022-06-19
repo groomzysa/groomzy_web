@@ -1,12 +1,16 @@
 import React, { FC, useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, DialogActions, Grid, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 
 import { useFetchService } from "api/hooks/queries";
 import { useEditService } from "api/hooks/mutations";
 import { CATEGORIES, DURATION_UNITS } from "utils/constants";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GButton, GDialogBox, GSelect, GTextField } from "components";
 import { ISelectOption } from "store/types";
@@ -15,6 +19,7 @@ import { useStyles } from "./styles";
 
 export const EditService: FC = () => {
   const { id, serviceId } = useParams();
+  const [searchParams] = useSearchParams();
   const [title, setTitle] = useState<string>();
   const [price, setPrice] = useState<string>();
   const [description, setDescription] = useState<string>();
@@ -41,17 +46,7 @@ export const EditService: FC = () => {
     editServiceLoading,
     editServiceErrorMessage,
     editServiceHasError,
-  } = useEditService({
-    variables: {
-      serviceId: Number(serviceId),
-      category: category?.value,
-      title,
-      description,
-      price: price ? Number(price) : undefined,
-      duration: duration ? Number(duration) : undefined,
-      durationUnit: durationUnit?.value,
-    },
-  });
+  } = useEditService();
 
   /**
    *
@@ -82,12 +77,28 @@ export const EditService: FC = () => {
    *
    */
   const handleEditService = async () => {
-    editServiceMutate();
+    editServiceMutate({
+      serviceId: Number(serviceId),
+      category: category?.value,
+      title,
+      description,
+      price: price ? Number(price) : undefined,
+      duration: duration ? Number(duration) : undefined,
+      durationUnit: durationUnit?.value,
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "0",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   /**

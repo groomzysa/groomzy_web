@@ -1,17 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { DELETE_SERVICE_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Message, Service } from "api/generated/graphqlTypes";
+import { useDeleteServiceMutation } from "api/generated/schema";
 
-import { IUseDeleteService } from "./types";
-
-export const useDeleteService = ({ variables }: IUseDeleteService) => {
+export const useDeleteService = () => {
   const queryClient = useQueryClient();
-
-  const deleteService = async () => {
-    return graphqlRequestClient().request(DELETE_SERVICE_MUTATION, variables);
-  };
 
   const {
     mutate: deleteServiceMutate,
@@ -19,18 +12,8 @@ export const useDeleteService = ({ variables }: IUseDeleteService) => {
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    deleteService: { message: Message; service: Service };
-  }>("deleteService", deleteService, {
-    onSuccess: (data) => {
-      queryClient.setQueryData("providerServices", ({ providerServices }) => {
-        const newProviderServices = providerServices.filter(
-          (providerService: Service) =>
-            providerService.id !== data.deleteService.service.id
-        );
-        return { providerServices: newProviderServices };
-      });
-    },
+  } = useDeleteServiceMutation(graphqlRequestClient(), {
+    onSuccess: () => queryClient.invalidateQueries("providerServicesQuery"),
   });
 
   //@ts-ignore

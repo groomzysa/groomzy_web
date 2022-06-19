@@ -5,7 +5,7 @@ import {
   useContext,
   useReducer,
 } from "react";
-import { Provider, QueryProvidersArgs } from "api/generated/graphqlTypes";
+import { Provider, QueryProvidersArgs } from "api/generated/schema";
 import {
   setProvidersDispatch,
   setProvidersSearchDispatch,

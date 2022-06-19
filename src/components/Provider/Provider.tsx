@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -19,7 +19,7 @@ import { LocationOnOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { GCategoryChip, GLoadingSpinner, GTextOverflow } from "components";
 import { GButton } from "components/GButton";
 import { PROVIDER_TRADING } from "utils/constants";
-import { Address, ProviderProfile } from "api/generated/graphqlTypes";
+import { Address, ProviderProfile } from "api/generated/schema";
 
 import { IProviderProps } from "./types";
 import { useProviderHandlers } from "./hooks";
@@ -64,10 +64,12 @@ export const Provider: FC<IProviderProps> = ({
    * Callbacks
    *
    */
-  const getDistance = useCallback(() => {
-    return handleDistance();
+  const getDistance = useMemo(
+    () => handleDistance,
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    []
+  );
 
   /**
    *
@@ -109,11 +111,11 @@ export const Provider: FC<IProviderProps> = ({
         avatar={
           <Avatar
             alt={fullName || "Profile placeholder"}
-            src={profileImageUrl as string}
+            src={(profile?.tradingProfileImageUrl || profileImageUrl) as string}
             className={classes.avatar}
           />
         }
-        title={<Typography>{fullName}</Typography>}
+        title={<Typography>{profile?.tradingName || fullName}</Typography>}
       />
 
       <CardContent className={classes.cardContent}>

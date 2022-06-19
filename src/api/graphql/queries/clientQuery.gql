@@ -1,0 +1,19 @@
+query clientQuery {
+  client {
+    id
+    email
+    fullName
+    profileImageUrl
+    address {
+      id
+      streetNumber
+      streetName
+      suburbName
+      cityName
+      provinceName
+      areaCode
+      latitude
+      longitude
+    }
+  }
+}

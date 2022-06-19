@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import haversine from "haversine-distance";
 
-import { Address, ProviderProfile } from "api/generated/graphqlTypes";
+import { Address, ProviderProfile } from "api/generated/schema";
 
 export const useProviderHandlers = ({
   address,

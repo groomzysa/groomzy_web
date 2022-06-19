@@ -1,25 +1,14 @@
-import { useMutation } from "react-query";
-
-import { SEND_MAIL_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { IMessage } from "store/types";
+import { useSendMailMutation } from "api/generated/schema";
 
-import { ISendEmail } from "./types";
-
-export const useSendMail = ({ variables }: ISendEmail) => {
-  const sendMail = async () => {
-    return graphqlRequestClient().request(SEND_MAIL_MUTATION, variables);
-  };
-
+export const useSendMail = () => {
   const {
     mutate: sendMailMutation,
     data,
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    sendMail: IMessage;
-  }>("sendMail", sendMail);
+  } = useSendMailMutation(graphqlRequestClient());
 
   //@ts-ignore
   const errorMessage = error?.response?.errors?.[0]?.message;

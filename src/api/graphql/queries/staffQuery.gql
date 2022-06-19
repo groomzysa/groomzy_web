@@ -1,0 +1,6 @@
+query staffQuery($id: Int!) {
+  staff(id: $id) {
+    id
+    fullName
+  }
+}

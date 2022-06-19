@@ -22,4 +22,6 @@ export interface IGTextFieldProps {
   startIcon?: ReactNode;
   placeholder?: string;
   errorMessage?: string;
+  resetErrorMessage?: (value: string) => void;
+  autoFocus?: boolean;
 }

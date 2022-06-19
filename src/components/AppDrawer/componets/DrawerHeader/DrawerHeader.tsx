@@ -3,7 +3,9 @@ import { Grid, Box, IconButton, Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 
+import { GTextOverflow } from "components";
 import { useApp } from "store";
+
 import { IDrawerHeaderProps } from "./types";
 import { useStyles } from "./styles";
 
@@ -42,7 +44,10 @@ export const DrawerHeader: FC<IDrawerHeaderProps> = ({
               </Grid>
               {signedInUser?.fullName ? (
                 <Grid item className={classes.name}>
-                  {signedInUser.fullName}
+                  <GTextOverflow
+                    id="signed-in-user-drawer-header"
+                    title={signedInUser.fullName}
+                  />
                 </Grid>
               ) : null}
             </Grid>

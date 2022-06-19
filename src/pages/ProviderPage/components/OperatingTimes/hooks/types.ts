@@ -1,4 +1,4 @@
-import { DayTime } from "api/generated/graphqlTypes";
+import { DayTime } from "api/generated/schema";
 
 type classesRecord = Record<
   "padRight10" | "viewButton" | "editButton" | "deleteButton" | "headerName",

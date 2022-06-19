@@ -1,0 +1,69 @@
+mutation editProfileMutation(
+  $fullName: String
+  $streetNumber: String
+  $streetName: String
+  $suburbName: String
+  $cityName: String
+  $provinceName: String
+  $areaCode: String
+  $latitude: Float
+  $longitude: Float
+  $profileImage: File
+) {
+  editProfile(
+    fullName: $fullName
+    streetNumber: $streetNumber
+    streetName: $streetName
+    suburbName: $suburbName
+    cityName: $cityName
+    provinceName: $provinceName
+    areaCode: $areaCode
+    latitude: $latitude
+    longitude: $longitude
+    profileImage: $profileImage
+  ) {
+    message {
+      message
+    }
+    provider {
+      id
+      email
+      fullName
+      phoneNumber
+      profileImageUrl
+      token
+      role
+      address {
+        id
+        streetNumber
+        streetName
+        suburbName
+        cityName
+        provinceName
+        areaCode
+        latitude
+        longitude
+      }
+    }
+    client {
+      id
+      email
+      fullName
+      phoneNumber
+      profileImageUrl
+      token
+      role
+      address {
+        id
+        streetNumber
+        streetName
+        suburbName
+        cityName
+        provinceName
+        areaCode
+        latitude
+        longitude
+      }
+    }
+  }
+}

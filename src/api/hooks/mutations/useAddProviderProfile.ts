@@ -1,22 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { ADD_PROVIDER_PROFILE_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Message, ProviderProfile } from "api/generated/graphqlTypes";
+import { useAddProviderProfileMutation } from "api/generated/schema";
 
-import { IUseAddProviderProfile } from "./types";
-
-export const useAddProviderProfile = ({
-  variables,
-}: IUseAddProviderProfile) => {
+export const useAddProviderProfile = () => {
   const queryClient = useQueryClient();
-
-  const addProviderProfile = async () => {
-    return graphqlRequestClient().request(
-      ADD_PROVIDER_PROFILE_MUTATION,
-      variables
-    );
-  };
 
   const {
     mutate: addProviderProfileMutate,
@@ -24,17 +12,8 @@ export const useAddProviderProfile = ({
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    addProviderProfile: {
-      message: Message;
-      addProviderProfile: ProviderProfile;
-    };
-  }>("addProviderProfile", addProviderProfile, {
-    onSuccess: (data) => {
-      queryClient.setQueryData("providerProfile", () => {
-        return { providerProfile: data.addProviderProfile };
-      });
-    },
+  } = useAddProviderProfileMutation(graphqlRequestClient(), {
+    onSuccess: () => queryClient.invalidateQueries("providerProfileQuery"),
   });
 
   //@ts-ignore

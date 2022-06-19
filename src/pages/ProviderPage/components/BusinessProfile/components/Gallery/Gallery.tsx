@@ -1,12 +1,19 @@
 import React, { FC } from "react";
-import { useParams, useNavigate, Routes, Route } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  Routes,
+  Route,
+  createSearchParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Box, Grid } from "@mui/material";
 import { AddOutlined } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import { isEmpty } from "lodash";
 
 import { useFetchProviderGallery } from "api/hooks/queries";
-import { GButton, GCenterMessage } from "components";
+import { GButton, GCenterMessage, GLoadingSpinner } from "components";
 
 import {
   AddGalleryImage,
@@ -18,6 +25,7 @@ import { useStyles } from "./styles";
 
 export const Gallery: FC = () => {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const classes = useStyles();
@@ -27,7 +35,7 @@ export const Gallery: FC = () => {
    * Custom hooks
    *
    */
-  const { providerGallery } = useFetchProviderGallery({
+  const { providerGallery, isLoading } = useFetchProviderGallery({
     variables: { providerId: Number(id) },
   });
 
@@ -35,6 +43,21 @@ export const Gallery: FC = () => {
     classes,
     gallery: providerGallery || [],
   });
+
+  /**
+   *
+   * Handlers
+   *
+   */
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "3",
+    }).toString();
+  };
+
+  if (isLoading) {
+    return <GLoadingSpinner />;
+  }
 
   return (
     <Grid container direction="column">
@@ -44,7 +67,12 @@ export const Gallery: FC = () => {
           startIcon={<AddOutlined />}
           className={classes.addButton}
           variant="outlined"
-          onClick={() => navigate(encodeURI(`add_gallery_image`))}
+          onClick={() =>
+            navigate({
+              pathname: encodeURI(`add_gallery_image`),
+              search: handleCreateTabIndexSearchParam(),
+            })
+          }
         />
       </Grid>
       <Grid className={classes.padTop10} item>

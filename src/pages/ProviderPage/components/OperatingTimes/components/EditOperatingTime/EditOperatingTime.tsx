@@ -1,5 +1,10 @@
 import React, { FC, useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, DialogActions, Grid, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 import TimePicker, { TimePickerValue } from "react-time-picker";
@@ -7,7 +12,6 @@ import TimePicker, { TimePickerValue } from "react-time-picker";
 import { useEditOperatingTime } from "api/hooks/mutations";
 import { useFetchOperatingTime } from "api/hooks/queries";
 import { BUSINESS_DAYS } from "utils/constants";
-import { setLocalStorage } from "utils/localStorage";
 
 import { GButton, GDialogBox, GSelect } from "components";
 import { ISelectOption } from "store/types";
@@ -16,6 +20,7 @@ import { useStyles } from "./styles";
 
 export const EditOperatingTime: FC = () => {
   const { id, operatingTimeId } = useParams();
+  const [searchParams] = useSearchParams();
   const [day, setDay] = useState<ISelectOption>();
   const [startTime, setStartTime] = useState<TimePickerValue>("00:00");
   const [startTimeChanged, setStartTimeChanged] = useState<boolean>(false);
@@ -40,14 +45,7 @@ export const EditOperatingTime: FC = () => {
     editOperatingTimeLoading,
     editOperatingTimeErrorMessage,
     editOperatingTimeHasError,
-  } = useEditOperatingTime({
-    variables: {
-      dayTimeId: Number(operatingTimeId),
-      day: day?.value ? day?.value || "" : operatingTime?.day?.day || "",
-      startTime: startTimeChanged ? (startTime as string) : undefined,
-      endTime: endTimeChanged ? (endTime as string) : undefined,
-    },
-  });
+  } = useEditOperatingTime();
 
   /**
    *
@@ -80,12 +78,25 @@ export const EditOperatingTime: FC = () => {
    *
    */
   const handleEditOperatingTime = async () => {
-    editOperatingTimeMutate();
+    editOperatingTimeMutate({
+      dayTimeId: Number(operatingTimeId),
+      day: day?.value ? day?.value || "" : operatingTime?.day?.day || "",
+      startTime: startTimeChanged ? (startTime as string) : undefined,
+      endTime: endTimeChanged ? (endTime as string) : undefined,
+    });
+  };
+
+  const handleCreateTabIndexSearchParam = () => {
+    return createSearchParams({
+      tabIndex: searchParams.get("tabIndex")?.toString() || "1",
+    }).toString();
   };
 
   const handleClose = () => {
-    setLocalStorage("provderTabIndex", "");
-    navigate(encodeURI(`/${id}`));
+    navigate({
+      pathname: encodeURI(`/${id}`),
+      search: handleCreateTabIndexSearchParam(),
+    });
   };
 
   const handleStartTimeChange = (value: TimePickerValue) => {

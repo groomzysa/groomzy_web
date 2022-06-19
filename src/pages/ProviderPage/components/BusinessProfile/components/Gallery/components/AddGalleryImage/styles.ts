@@ -86,5 +86,10 @@ export const useStyles = makeStyles(() => {
         },
       },
     },
+    imgError: {
+      fontSize: 12,
+      color: red[500],
+      paddingLeft: 15,
+    },
   };
 });

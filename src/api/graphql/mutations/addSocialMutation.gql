@@ -1,0 +1,12 @@
+mutation addSocialMutation($name: String!, $url: String!) {
+  addSocial(name: $name, url: $url) {
+    message {
+      message
+    }
+    social {
+      id
+      name
+      url
+    }
+  }
+}

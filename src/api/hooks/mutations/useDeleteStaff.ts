@@ -1,17 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { DELETE_STAFF_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Message, Staff } from "api/generated/graphqlTypes";
+import { useDeleteStaffMutation } from "api/generated/schema";
 
-import { IUseDeleteStaff } from "./types";
-
-export const useDeleteStaff = ({ variables }: IUseDeleteStaff) => {
+export const useDeleteStaff = () => {
   const queryClient = useQueryClient();
-
-  const deleteStaff = async () => {
-    return graphqlRequestClient().request(DELETE_STAFF_MUTATION, variables);
-  };
 
   const {
     mutate: deleteStaffMutate,
@@ -19,18 +12,8 @@ export const useDeleteStaff = ({ variables }: IUseDeleteStaff) => {
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    deleteStaff: { message: Message; staff: Staff };
-  }>("deleteStaff", deleteStaff, {
-    onSuccess: (data) => {
-      queryClient.setQueryData("providerStaffs", ({ providerStaffs }) => {
-        const newProviderStaffs = providerStaffs.filter(
-          (providerStaff: Staff) =>
-            providerStaff.id !== data.deleteStaff.staff.id
-        );
-        return { providerStaffs: newProviderStaffs };
-      });
-    },
+  } = useDeleteStaffMutation(graphqlRequestClient(), {
+    onSuccess: () => queryClient.invalidateQueries("providerStaffsQuery"),
   });
 
   //@ts-ignore

@@ -1,0 +1,11 @@
+mutation editStaffMutation($staffId: Int!, $fullName: String) {
+  editStaff(staffId: $staffId, fullName: $fullName) {
+    message {
+      message
+    }
+    staff {
+      id
+      fullName
+    }
+  }
+}

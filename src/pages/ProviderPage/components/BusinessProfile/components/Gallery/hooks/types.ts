@@ -1,4 +1,4 @@
-import { ProviderGallery } from "api/generated/graphqlTypes";
+import { ProviderGallery } from "api/generated/schema";
 
 type classesRecord = Record<"headerName", string>;
 

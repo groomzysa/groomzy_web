@@ -58,28 +58,7 @@ export const Profile: FC = () => {
     addProviderProfileLoading,
     addProviderProfileHasError,
     addProviderProfileErrorMessage,
-  } = useAddProviderProfile({
-    variables: {
-      tradingName: tradingName || providerProfile?.tradingName || "",
-      tradingStreetName:
-        tradingStreetName || providerProfile?.tradingStreetName || "",
-      tradingStreetNumber:
-        tradingStreetNumber || providerProfile?.tradingStreetNumber || "",
-      tradingSuburbName:
-        tradingSuburbName || providerProfile?.tradingSuburbName || "",
-      tradingCityName:
-        tradingCityName || providerProfile?.tradingCityName || "",
-      tradingProvinceName:
-        tradingProvinceName?.value ||
-        providerProfile?.tradingProvinceName ||
-        "",
-      tradingAreaCode:
-        tradingAreaCode || providerProfile?.tradingAreaCode || "",
-      tradingLatitude,
-      tradingLongitude,
-      tradingProfileImage,
-    },
-  });
+  } = useAddProviderProfile();
 
   /**
    *
@@ -176,7 +155,26 @@ export const Profile: FC = () => {
   const handleAddProviderProfile = async () => {
     const proceed = await handleGetLatLng();
     if (proceed) {
-      addProviderProfileMutate();
+      addProviderProfileMutate({
+        tradingName: tradingName || providerProfile?.tradingName || "",
+        tradingStreetName:
+          tradingStreetName || providerProfile?.tradingStreetName || "",
+        tradingStreetNumber:
+          tradingStreetNumber || providerProfile?.tradingStreetNumber || "",
+        tradingSuburbName:
+          tradingSuburbName || providerProfile?.tradingSuburbName || "",
+        tradingCityName:
+          tradingCityName || providerProfile?.tradingCityName || "",
+        tradingProvinceName:
+          tradingProvinceName?.value ||
+          providerProfile?.tradingProvinceName ||
+          "",
+        tradingAreaCode:
+          tradingAreaCode || providerProfile?.tradingAreaCode || "",
+        tradingLatitude,
+        tradingLongitude,
+        tradingProfileImage,
+      });
     }
   };
 

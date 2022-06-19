@@ -1,0 +1,7 @@
+query providerSocialsQuery($providerId: Int!) {
+  providerSocials(providerId: $providerId) {
+    id
+    name
+    url
+  }
+}

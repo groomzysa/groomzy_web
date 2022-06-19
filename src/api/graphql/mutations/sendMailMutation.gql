@@ -1,0 +1,15 @@
+mutation sendMailMutation(
+  $fullName: String!
+  $subject: String!
+  $email: String!
+  $message: String!
+) {
+  sendMail(
+    fullName: $fullName
+    subject: $subject
+    email: $email
+    message: $message
+  ) {
+    message
+  }
+}

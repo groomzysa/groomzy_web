@@ -1,0 +1,6 @@
+query providerStaffsQuery($providerId: Int!) {
+  providerStaffs(providerId: $providerId) {
+    id
+    fullName
+  }
+}

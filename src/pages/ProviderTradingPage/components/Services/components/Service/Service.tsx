@@ -42,7 +42,7 @@ export const Service: FC<IServiceProps> = ({
         <CardActions>
           <Grid container>
             <Grid item>
-              <GCategoryChip category={category.category} />
+              <GCategoryChip category={category?.category || ""} />
             </Grid>
           </Grid>
           <Grid container justifyContent="flex-end">

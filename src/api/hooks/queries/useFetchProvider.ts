@@ -1,10 +1,6 @@
-import { useQuery } from "react-query";
-import { GraphQLResponse } from "graphql-request/dist/types";
-
-import { PROVIDER_QUERY } from "api/graphql/queries";
 import { getUserIdAndRole } from "utils/auth";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { Provider } from "api/generated/graphqlTypes";
+import { Provider, useProviderQuery } from "api/generated/schema";
 import { Role } from "store/types";
 
 export const useFetchProvider = (token: string, signedInUser: Provider) => {
@@ -20,13 +16,9 @@ export const useFetchProvider = (token: string, signedInUser: Provider) => {
     enabled = false;
   }
 
-  const fetchProvider = async () => {
-    return graphqlRequestClient().request(PROVIDER_QUERY, undefined);
-  };
-
-  const { data, isLoading, error } = useQuery<GraphQLResponse, Error, Provider>(
-    "provider",
-    fetchProvider,
+  const { data, isLoading, error } = useProviderQuery(
+    graphqlRequestClient(),
+    undefined,
     { enabled: enabled, select: (data) => data?.provider }
   );
 

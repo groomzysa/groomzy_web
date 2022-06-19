@@ -51,6 +51,14 @@ export const ProviderPage: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role]);
 
+  useEffect(() => {
+    if (!tabIndex) {
+      handleTabIndexChange(0);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabIndex]);
+
   /**
    *
    * Handlers

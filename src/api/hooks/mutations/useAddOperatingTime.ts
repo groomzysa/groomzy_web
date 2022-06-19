@@ -1,20 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
-import { ADD_OPERATING_TIME_MUTATION } from "api/graphql/mutations";
 import { graphqlRequestClient } from "utils/graphqlClient";
-import { DayTime, Message } from "api/generated/graphqlTypes";
+import { useAddOperatingTimeMutation } from "api/generated/schema";
 
-import { IUseAddOperatingTime } from "./types";
-
-export const useAddOperatingTime = ({ variables }: IUseAddOperatingTime) => {
+export const useAddOperatingTime = () => {
   const queryClient = useQueryClient();
-
-  const addOperatingTime = async () => {
-    return graphqlRequestClient().request(
-      ADD_OPERATING_TIME_MUTATION,
-      variables
-    );
-  };
 
   const {
     mutate: addOperatingTimeMutate,
@@ -22,21 +12,9 @@ export const useAddOperatingTime = ({ variables }: IUseAddOperatingTime) => {
     isLoading,
     error,
     isError,
-  } = useMutation<{
-    addOperatingTime: { message: Message; operatingTime: DayTime };
-  }>("addOperatingTime", addOperatingTime, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        "providerOperatingTimes",
-        ({ providerOperatingTimes }) => {
-          const newProviderOperatingTimes = [
-            data.addOperatingTime.operatingTime,
-            ...providerOperatingTimes,
-          ];
-          return { providerOperatingTimes: newProviderOperatingTimes };
-        }
-      );
-    },
+  } = useAddOperatingTimeMutation(graphqlRequestClient(), {
+    onSuccess: () =>
+      queryClient.invalidateQueries("providerOperatingTimesQuery"),
   });
 
   //@ts-ignore
