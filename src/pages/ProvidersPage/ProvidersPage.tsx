@@ -142,7 +142,7 @@ export const ProvidersPage: FC = () => {
             {enabledProviders.map((provider) => {
               return (
                 <Grid key={provider.id} item xs={12} sm={6} md={4} lg={3}>
-                  <Box margin={1}>
+                  <Box className={classes.wrapper}>
                     <Provider provider={provider} />
                   </Box>
                 </Grid>
