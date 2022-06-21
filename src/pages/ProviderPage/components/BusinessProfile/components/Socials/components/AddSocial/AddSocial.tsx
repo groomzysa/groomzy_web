@@ -18,7 +18,9 @@ export const AddSocial: FC = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const [name, setName] = useState<string>("");
+  const [nameError, setNameError] = useState<string>("");
   const [url, setUrl] = useState<string>("");
+  const [urlError, setUrlError] = useState<string>("");
   const [addSocialSuccessMessage, setAddSocialSuccessMessage] =
     useState<string>();
   const navigate = useNavigate();
@@ -66,7 +68,7 @@ export const AddSocial: FC = () => {
    *
    */
   const handleAddSocial = async () => {
-    if (!name || !url) return;
+    if (handleInputHasError()) return;
     addSocialMutate({
       name,
       url,
@@ -84,6 +86,21 @@ export const AddSocial: FC = () => {
       pathname: encodeURI(`/${id}`),
       search: handleCreateTabIndexSearchParam(),
     });
+  };
+
+  const handleInputHasError = () => {
+    let hasError = false;
+    if (!name) {
+      setNameError("Social name is required");
+      hasError = true;
+    }
+
+    if (!url) {
+      setUrlError("Social link is required");
+      hasError = true;
+    }
+
+    return hasError;
   };
 
   /**
@@ -113,6 +130,8 @@ export const AddSocial: FC = () => {
           textValue={name}
           setText={setName}
           disabled={addSocialLoading}
+          errorMessage={nameError}
+          resetErrorMessage={setNameError}
         />
       </Grid>
       <Grid className={classes.padTop10} item>
@@ -122,6 +141,8 @@ export const AddSocial: FC = () => {
           textValue={url}
           setText={setUrl}
           disabled={addSocialLoading}
+          errorMessage={urlError}
+          resetErrorMessage={setUrlError}
         />
       </Grid>
     </Grid>

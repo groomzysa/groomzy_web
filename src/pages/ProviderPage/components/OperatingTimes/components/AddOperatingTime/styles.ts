@@ -39,5 +39,10 @@ export const useStyles = makeStyles(() => {
     timeInputLabel: {
       width: 200,
     },
+    timeInputError: {
+      fontSize: 12,
+      color: red[500],
+      paddingLeft: 15,
+    },
   };
 });

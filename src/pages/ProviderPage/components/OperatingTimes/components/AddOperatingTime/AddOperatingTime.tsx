@@ -21,8 +21,11 @@ export const AddOperatingTime: FC = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const [day, setDay] = useState<ISelectOption>();
+  const [dayError, setDayError] = useState<string>("");
   const [startTime, setStartTime] = useState<TimePickerValue>("08:00");
+  const [startTimeError, setStartTimeError] = useState<string>("");
   const [endTime, setEndTime] = useState<TimePickerValue>("17:00");
+  const [endTimeError, setEndTimeError] = useState<string>("");
   const [addOperatingTimeSuccessMessage, setAddOperatingTimeSuccessMessage] =
     useState<string>();
   const navigate = useNavigate();
@@ -72,7 +75,7 @@ export const AddOperatingTime: FC = () => {
    *
    */
   const handleAddOperatingTime = async () => {
-    if (!day || !startTime || !endTime) return;
+    if (handleInputHasError()) return;
     addOperatingTimeMutate({
       day: day?.value || "",
       startTime: startTime as string,
@@ -91,6 +94,29 @@ export const AddOperatingTime: FC = () => {
       pathname: encodeURI(`/${id}`),
       search: handleCreateTabIndexSearchParam(),
     });
+  };
+
+  const handleInputHasError = () => {
+    let hasError = false;
+    if (!day) {
+      setDayError("Day is required");
+      hasError = true;
+    }
+
+    if (!startTime) {
+      setStartTimeError("Day start time is required");
+      hasError = true;
+    } else if (startTimeError) {
+      setStartTimeError("");
+    }
+
+    if (!endTime) {
+      setEndTimeError("Day end time is required");
+      hasError = true;
+    } else if (endTimeError) {
+      setEndTimeError("");
+    }
+    return hasError;
   };
 
   /**
@@ -121,6 +147,8 @@ export const AddOperatingTime: FC = () => {
           setSelect={setDay}
           value={day}
           disabled={addOperatingTimeLoading}
+          errorMessage={dayError}
+          resetErrorMessage={setDayError}
         />
       </Grid>
       <Grid className={classes.padTop10} item>
@@ -131,16 +159,25 @@ export const AddOperatingTime: FC = () => {
             </Typography>
           </Grid>
           <Grid item>
-            <TimePicker
-              name="Start time"
-              value={startTime}
-              onChange={setStartTime}
-              format="HH:mm"
-              hourPlaceholder="hh"
-              minutePlaceholder="mm"
-              disabled={addOperatingTimeLoading}
-              disableClock
-            />
+            <Grid container direction="column">
+              <Grid item>
+                <TimePicker
+                  name="Start time"
+                  value={startTime}
+                  onChange={setStartTime}
+                  format="HH:mm"
+                  hourPlaceholder="hh"
+                  minutePlaceholder="mm"
+                  disabled={addOperatingTimeLoading}
+                  disableClock
+                />
+              </Grid>
+              {startTimeError && (
+                <Grid className={classes.timeInputError} item>
+                  {startTimeError}
+                </Grid>
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -152,16 +189,25 @@ export const AddOperatingTime: FC = () => {
             </Typography>
           </Grid>
           <Grid item>
-            <TimePicker
-              name="End time"
-              value={endTime}
-              onChange={setEndTime}
-              format="HH:mm"
-              hourPlaceholder="hh"
-              minutePlaceholder="mm"
-              disabled={addOperatingTimeLoading}
-              disableClock
-            />
+            <Grid container direction="column">
+              <Grid item>
+                <TimePicker
+                  name="End time"
+                  value={endTime}
+                  onChange={setEndTime}
+                  format="HH:mm"
+                  hourPlaceholder="hh"
+                  minutePlaceholder="mm"
+                  disabled={addOperatingTimeLoading}
+                  disableClock
+                />
+              </Grid>
+              {endTimeError && (
+                <Grid className={classes.timeInputError} item>
+                  {endTimeError}
+                </Grid>
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
