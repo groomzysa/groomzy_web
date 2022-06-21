@@ -76,8 +76,8 @@ export const ContactsPage: FC = () => {
 
   return (
     <Grid className={classes.center} container>
-      <Grid item xs={0} md={2} lg={3}></Grid>
-      <Grid item xs={12} md={8} lg={6}>
+      <Grid item xs={0} md={3}></Grid>
+      <Grid item xs={12} md={6}>
         <Grid container direction="column">
           <Grid item xs>
             {sendMailhasError ? (
@@ -171,7 +171,7 @@ export const ContactsPage: FC = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={0} md={2} lg={3}></Grid>
+        <Grid item xs={0} md={3}></Grid>
       </Grid>
     </Grid>
   );

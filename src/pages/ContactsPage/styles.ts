@@ -7,7 +7,6 @@ export const useStyles = makeStyles(() => {
       position: "relative",
       margin: "auto",
       left: "0%",
-      transform: "translateY(10%)",
     },
     heading: {
       color: blueGrey[500],

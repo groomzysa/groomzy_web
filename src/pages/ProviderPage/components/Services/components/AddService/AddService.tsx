@@ -106,7 +106,7 @@ export const AddService: FC = () => {
   const handleInputHasError = () => {
     let hasError = false;
     if (!category) {
-      setCategoryError("category is required");
+      setCategoryError("Category is required");
       hasError = true;
     }
     if (!title) {

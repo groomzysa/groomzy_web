@@ -18,6 +18,7 @@ export const AddStaff: FC = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const [fullName, setFullName] = useState<string>("");
+  const [fullNameError, setFullNameError] = useState<string>("");
   const [addStaffSuccessMessage, setAddStaffSuccessMessage] =
     useState<string>();
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ export const AddStaff: FC = () => {
    *
    */
   const handleAddStaff = async () => {
-    if (!fullName) return;
+    if (handleInputHasError()) return;
     addStaffMutate({ fullName });
   };
 
@@ -80,6 +81,15 @@ export const AddStaff: FC = () => {
       pathname: encodeURI(`/${id}`),
       search: handleCreateTabIndexSearchParam(),
     });
+  };
+
+  const handleInputHasError = () => {
+    let hasError = false;
+    if (!fullName) {
+      setFullNameError("Full name is required");
+      hasError = true;
+    }
+    return hasError;
   };
 
   /**
@@ -109,6 +119,8 @@ export const AddStaff: FC = () => {
           textValue={fullName}
           setText={setFullName}
           disabled={addStaffLoading}
+          errorMessage={fullNameError}
+          resetErrorMessage={setFullNameError}
         />
       </Grid>
     </Grid>
