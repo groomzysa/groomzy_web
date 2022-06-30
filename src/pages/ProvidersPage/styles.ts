@@ -6,34 +6,33 @@ export const useStyles = makeStyles((theme: Theme) => {
     wrapper: {
       [theme.breakpoints.up("sm")]: {
         margin: 6,
-        marginRight: 10,
       },
       [theme.breakpoints.down("sm")]: {
         marginLeft: 6,
         marginTop: 6,
-        marginRight: 10,
+        marginRight: 6,
       },
     },
     padRight5: {
       paddingRight: 5,
     },
     searchInput: {
-      paddingLeft: 6,
+      marginLeft: "6px !important",
       [theme.breakpoints.down("sm")]: {
-        paddingRight: 10,
+        marginRight: "6px !important",
       },
     },
     categorySelect: {
       minWidth: 200,
-      paddingLeft: 10,
+      marginLeft: "6px !important",
       [theme.breakpoints.up("sm")]: {
         minWidth: 300,
       },
       [theme.breakpoints.down("sm")]: {
-        paddingTop: 5,
-        paddingLeft: 5,
+        marginTop: "10px !important",
+        marginLeft: "6px !important",
         width: "100%",
-        paddingRight: 10,
+        marginRight: "6px !important",
       },
     },
   };

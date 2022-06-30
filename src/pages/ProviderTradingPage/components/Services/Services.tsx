@@ -9,9 +9,11 @@ import { Category } from "api/generated/schema";
 import { GCenterMessage, GLoadingSpinner } from "components";
 
 import { Service } from "./components";
+import { useStyles } from "./styles";
 
 export const Services: FC = () => {
   const { id } = useParams();
+  const classes = useStyles();
 
   /**
    *
@@ -31,7 +33,7 @@ export const Services: FC = () => {
   }
 
   return (
-    <Grid container justifyContent="normal">
+    <Grid className={classes.padBottom} container justifyContent="normal">
       {providerServices?.map((providerService) => {
         const { serviceProviderCategories } = providerService;
         const service = providerService;

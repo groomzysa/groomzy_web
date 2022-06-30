@@ -62,6 +62,7 @@ export const useStyles = makeStyles(() => {
     },
     address: {
       paddingLeft: 10,
+      paddingRight: 10,
     },
     categories: {
       position: "relative",

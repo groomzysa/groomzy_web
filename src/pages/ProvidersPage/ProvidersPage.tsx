@@ -65,7 +65,7 @@ export const ProvidersPage: FC = () => {
   useEffect(() => {
     setProvidersSearch({
       search,
-      category: category?.value,
+      category: category?.value !== "All" ? category?.value : undefined,
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

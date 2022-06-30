@@ -44,7 +44,7 @@ export const PROVINCES: ISelectOption[] = [
  */
 
 export const CATEGORIES: ISelectOption[] = [
-  { id: 0, value: "None", label: "None" },
+  { id: 0, value: "All", label: "All" },
   { id: 1, value: Category.Barber, label: Category.Barber },
   { id: 2, value: Category.Hairdresser, label: Category.Hairdresser },
   { id: 3, value: Category.MakeupArtist, label: Category.MakeupArtist },

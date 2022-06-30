@@ -25,7 +25,7 @@ export const GSelect: FC<IGSelectProps> = ({
     const selectedOption = options.find((option) => option.value === value);
     if (!selectedOption) return;
 
-    setSelect(selectedOption.value === "None" ? undefined : selectedOption);
+    setSelect(selectedOption);
   };
 
   return (

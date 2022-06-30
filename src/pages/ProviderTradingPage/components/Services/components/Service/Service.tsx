@@ -46,7 +46,10 @@ export const Service: FC<IServiceProps> = ({
             </Grid>
           </Grid>
           <Grid container justifyContent="flex-end">
-            <Grid item>{`${service.duration} ${service.durationUnit}`}</Grid>
+            <Grid
+              className={classes.time}
+              item
+            >{`${service.duration} ${service.durationUnit}`}</Grid>
           </Grid>
         </CardActions>
       </Card>

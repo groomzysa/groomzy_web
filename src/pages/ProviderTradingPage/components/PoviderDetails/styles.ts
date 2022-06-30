@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import { blueGrey } from "@mui/material/colors";
+import { blueGrey, grey } from "@mui/material/colors";
 import { Theme } from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => {
@@ -27,6 +27,7 @@ export const useStyles = makeStyles((theme: Theme) => {
     dayTimes: {
       fontWeight: "bold",
       fontSize: 18,
+      color: grey[500],
       [theme.breakpoints.down("sm")]: {
         fontSize: 16,
       },

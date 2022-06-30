@@ -30,6 +30,7 @@ export const EditService: FC = () => {
     useState<string>();
   const navigate = useNavigate();
   const classes = useStyles();
+  const CATEGORIES_ = CATEGORIES.filter(({ value }) => value !== "All");
 
   /**
    *
@@ -123,13 +124,13 @@ export const EditService: FC = () => {
       <Grid className={editServiceSuccessMessage ? classes.padTop10 : ""} item>
         <GSelect
           id="category"
-          options={CATEGORIES}
+          options={CATEGORIES_}
           selectLabel="Category"
           setSelect={setCategory}
           value={
             category
               ? category
-              : CATEGORIES.find(
+              : CATEGORIES_.find(
                   ({ value }) =>
                     value ===
                     service?.serviceProviderCategories?.[0]?.category?.category

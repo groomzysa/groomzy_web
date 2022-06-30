@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import { blueGrey } from "@mui/material/colors";
+import { blueGrey, grey } from "@mui/material/colors";
 
 export const useStyles = makeStyles(() => {
   return {
@@ -7,7 +7,7 @@ export const useStyles = makeStyles(() => {
       position: "relative",
       top: 6,
       fontWeight: "bold",
-      fontStyle: "italic",
+      color: grey[500],
     },
     title: {
       color: blueGrey[500],
@@ -28,6 +28,9 @@ export const useStyles = makeStyles(() => {
         paddingTop: 0,
         paddingBottom: 0,
       },
+    },
+    time: {
+      color: grey[500],
     },
   };
 });
