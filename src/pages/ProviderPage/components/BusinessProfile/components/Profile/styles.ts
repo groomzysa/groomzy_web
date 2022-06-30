@@ -1,7 +1,8 @@
 import { makeStyles } from "@mui/styles";
 import { blueGrey } from "@mui/material/colors";
+import { Theme } from "@mui/material";
 
-export const useStyles = makeStyles(() => {
+export const useStyles = makeStyles((theme: Theme) => {
   return {
     center: {
       position: "relative",
@@ -18,10 +19,16 @@ export const useStyles = makeStyles(() => {
     streetNumber: {
       width: 200,
       paddingRight: 5,
+      [theme.breakpoints.down("sm")]: {
+        width: 100,
+      },
     },
     province: {
       width: 250,
       paddingRight: 5,
+      [theme.breakpoints.down("sm")]: {
+        width: 150,
+      },
     },
     widthMin: {
       minWidth: 300,

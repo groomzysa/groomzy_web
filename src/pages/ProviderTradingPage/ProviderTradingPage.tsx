@@ -43,7 +43,7 @@ export const ProviderTradingPage: FC = () => {
       {Number(tabIndex) === 2 ? <Gallery /> : null}
 
       <Paper
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        sx={{ position: "fixed", bottom: 0, left: 46, right: 0 }}
         elevation={3}
       >
         <BottomNavigation

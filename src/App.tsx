@@ -12,7 +12,7 @@ function App() {
     <AppProvider>
       <ThemeProvider theme={theme}>
         <AppDrawer />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box component="main" sx={{ flexGrow: 1, pt: 3, pl: 3, pr: 1, pb: 1 }}>
           <Box marginLeft={6} marginTop={6}>
             <AppRoutes />
           </Box>

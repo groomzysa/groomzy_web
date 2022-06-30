@@ -6,10 +6,12 @@ export const useStyles = makeStyles((theme: Theme) => {
     wrapper: {
       [theme.breakpoints.up("sm")]: {
         margin: 6,
+        marginRight: 10,
       },
       [theme.breakpoints.down("sm")]: {
         marginLeft: 6,
         marginTop: 6,
+        marginRight: 10,
       },
     },
     padRight5: {
@@ -17,12 +19,21 @@ export const useStyles = makeStyles((theme: Theme) => {
     },
     searchInput: {
       paddingLeft: 6,
+      [theme.breakpoints.down("sm")]: {
+        paddingRight: 10,
+      },
     },
     categorySelect: {
-      minWidth: 150,
+      minWidth: 200,
       paddingLeft: 10,
       [theme.breakpoints.up("sm")]: {
-        minWidth: 400,
+        minWidth: 300,
+      },
+      [theme.breakpoints.down("sm")]: {
+        paddingTop: 5,
+        paddingLeft: 5,
+        width: "100%",
+        paddingRight: 10,
       },
     },
   };

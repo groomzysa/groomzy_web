@@ -4,7 +4,7 @@ import { makeStyles } from "@mui/styles";
 export const useStyles = makeStyles(() => {
   return {
     wrapper: {
-      height: 415,
+      height: 400,
     },
     cardContent: {
       "&.MuiCardContent-root": {
@@ -73,7 +73,7 @@ export const useStyles = makeStyles(() => {
       paddingLeft: 10,
     },
     carousel: {
-      height: 220,
+      height: 200,
     },
     carouselImg: {
       objectFit: "cover",

@@ -103,17 +103,16 @@ export const ProvidersPage: FC = () => {
   return (
     <Grid container direction="column">
       <Grid item>
-        <Grid container justifyContent="center">
+        <Grid container>
           <Grid className={classes.searchInput} item xs>
             <GTextField
               id="search-provider"
-              label="Search provider"
+              label=""
               placeholder="Search for service provider"
               startIcon={<SearchOutlined />}
               textValue={searchtext}
               setText={setSearchText}
               autoFocus={!!searchtext}
-              fullWidth
             />
           </Grid>
           <Grid item className={classes.categorySelect}>

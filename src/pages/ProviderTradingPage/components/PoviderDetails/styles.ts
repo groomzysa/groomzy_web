@@ -1,10 +1,11 @@
 import { makeStyles } from "@mui/styles";
 import { blueGrey } from "@mui/material/colors";
+import { Theme } from "@mui/material";
 
-export const useStyles = makeStyles(() => {
+export const useStyles = makeStyles((theme: Theme) => {
   return {
     mapWrapper: {
-      height: 350,
+      height: 300,
       width: "100%",
     },
     operatingTitle: {
@@ -15,6 +16,9 @@ export const useStyles = makeStyles(() => {
       fontWeight: "bold",
       display: "flex",
       justifyContent: "center",
+      [theme.breakpoints.down("sm")]: {
+        fontSize: 20,
+      },
     },
     timeSeperator: {
       paddingRight: 10,
@@ -23,6 +27,9 @@ export const useStyles = makeStyles(() => {
     dayTimes: {
       fontWeight: "bold",
       fontSize: 18,
+      [theme.breakpoints.down("sm")]: {
+        fontSize: 16,
+      },
     },
   };
 });

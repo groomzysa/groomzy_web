@@ -122,7 +122,7 @@ export const Provider: FC<IProviderProps> = ({
         <Grid container direction="column">
           <Grid item className={classes.carousel}>
             <Carousel
-              height={220}
+              height={200}
               indicatorContainerProps={{
                 style: {
                   position: "relative",

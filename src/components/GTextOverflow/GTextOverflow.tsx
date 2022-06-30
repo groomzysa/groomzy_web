@@ -20,7 +20,7 @@ export const GTextOverflow: FC<GTextOverflowProps> = ({
     if (!textElementRef) return;
 
     const compare =
-      textElementRef.current.clientWidth < textElementRef.current.scrollWidth;
+      textElementRef.current.clientWidth <= textElementRef.current.scrollWidth;
     setHover(compare);
   }, [textElementRef, width]);
 
